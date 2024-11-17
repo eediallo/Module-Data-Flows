@@ -26,10 +26,5 @@ function createFilmCard(film){
   return filmCard
 }
 
-const filmsCard = []
-for(let film of films){
-  const card = createFilmCard(film)
-  filmsCard.push(card)
-}
-
+const filmsCard = films.map(createFilmCard)
 document.body.append(...filmsCard)
