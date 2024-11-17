@@ -20,10 +20,10 @@ const films =  [
 
 function createFilmCard(film){
   const filmCard = document.getElementById('film-card-template').content.cloneNode(true)
-  filmCard.querySelector('h3').textContent = film.title
-  filmCard.querySelector('[data-director]').textContent =`Director: ${film.title}`
-  filmCard.querySelector('time').textContent =`Duration: ${film.times}`
-   filmCard.querySelector('[data-certificate]').textContent =`Certificate: ${film.certificate}`
+  filmCard.querySelector('h3').textContent = film['title']
+  filmCard.querySelector('[data-director]').textContent =`Director: ${film['director']}`
+  filmCard.querySelector('time').textContent =`Duration: ${film['times']}`
+   filmCard.querySelector('[data-certificate]').textContent =`Certificate: ${film['certificate']}`
   return filmCard
 }
 
