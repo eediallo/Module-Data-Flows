@@ -11,6 +11,6 @@ const film =   {
 
 
 const filmCard = document.getElementById('film-card-template').content.cloneNode(true)
-
-
-console.log(filmCard)
+filmCard.querySelector('h3').textContent = film.title
+filmCard.querySelector('p').textContent = film.director
+document.body.appendChild(filmCard)
