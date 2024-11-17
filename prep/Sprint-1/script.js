@@ -15,7 +15,7 @@ const films =  [
   }
 ]
 
-// sub goal: refactor to use template
+// Goal: build an array of film card and append them to the DOM
 
 
 function createFilmCard(film){
@@ -26,7 +26,10 @@ function createFilmCard(film){
   return filmCard
 }
 
+const filmsCard = []
 for(let film of films){
   const card = createFilmCard(film)
-  document.body.append(card)
+  filmsCard.push(card)
 }
+
+document.body.append(...filmsCard)
