@@ -18,6 +18,9 @@ const film =   {
 const filmCard = document.createElement('section')
 const body = document.body
 const title = document.createElement('h1')
+const director = document.createElement('p')
 title.textContent = film.title
+director.textContent = film.director
 filmCard.appendChild(title)
+filmCard.appendChild(director)
 body.appendChild(filmCard)
