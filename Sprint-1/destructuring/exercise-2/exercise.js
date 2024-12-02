@@ -72,7 +72,6 @@ let hogwarts = [
 ];
 
 
-
 function displaysPeopleAtGryffindorHouse(arr){
   for (const { firstName, lastName, house } of arr) {
     if (house === "Gryffindor") {
@@ -80,5 +79,16 @@ function displaysPeopleAtGryffindorHouse(arr){
     }
   }
 }
-
 displaysPeopleAtGryffindorHouse(hogwarts)
+
+
+function displayTeachersWithPets(arr){
+  for(const {pet, firstName, lastName} of arr){
+    if(pet){
+      console.log(firstName, lastName)
+    }
+  }
+}
+
+displayTeachersWithPets(hogwarts)
+
