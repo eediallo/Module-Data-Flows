@@ -42,6 +42,10 @@ function submit() {
   }
 }
 
+//add new book on submit
+const primButton = document.querySelector('.btn-primary')
+primButton.addEventListener('click', submit)
+
 function Book(title, author, pages, check) {
   this.title = title;
   this.author = author;
