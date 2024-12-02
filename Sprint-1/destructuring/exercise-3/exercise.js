@@ -9,18 +9,18 @@ let order = [
 
 const formatCurrency = (total) => (total / 100).toFixed(2);
 
-function formatReceiptDetails(str1, pad1Num, str2, pad2Num, str3) {
-  console.log(`${str1.padEnd(pad1Num)}${str2.padEnd(pad2Num)}${str3}`);
+function formatReceiptDetails(str1, str2, str3) {
+  console.log(`${str1.padEnd(8)}${str2.padEnd(20)}${str3}`);
 }
 
 function orderReceipt(arr) {
-  formatReceiptDetails("QTY", 8, 'ITEM', 20, 'TOTAL');
+  formatReceiptDetails("QTY", 'ITEM', 'TOTAL');
   let totalOrder = 0;
   for (const { quantity, itemName, unitPricePence } of arr) {
     const totalPerItem = unitPricePence * quantity;
     const formattedTotalPerItem = formatCurrency(totalPerItem);
     totalOrder += unitPricePence * quantity;
-    formatReceiptDetails(quantity.toString(), 8, itemName, 20, formattedTotalPerItem)
+    formatReceiptDetails(quantity.toString(), itemName, formattedTotalPerItem)
   }
 
   console.log(`\nTotal: ${formatCurrency(totalOrder)}`);
