@@ -7,22 +7,23 @@ let order = [
   { itemName: "Hash Brown", quantity: 4, unitPricePence: 40 },
 ];
 
+const formatCurrency = (total) => (total / 100).toFixed(2);
 
-const formatCurrency = (total) => (total/100).toFixed(2)
-
-
-function orderReceipt(arr){
-  
-  console.log('QTY'.padEnd(8),'ITEM'.padEnd(18),'TOTAL')
-  let totalOrder = 0
-  for(const {quantity, itemName, unitPricePence} of arr){
-    const totalPerItem = unitPricePence * quantity
-    const formattedTotalPerItem = formatCurrency(totalPerItem)
-    totalOrder += unitPricePence * quantity
-    console.log(`${quantity.toString().padEnd(8)}${itemName.padEnd(20)}${formattedTotalPerItem}`)
-  }
-
-  console.log(`\nTotal: ${formatCurrency(totalOrder)}`)
+function formatReceiptDetails(str1, pad1Num, str2, pad2Num, str3) {
+  console.log(`${str1.padEnd(pad1Num)}${str2.padEnd(pad2Num)}${str3}`);
 }
 
-orderReceipt(order)
+function orderReceipt(arr) {
+  formatReceiptDetails("QTY", 8, 'ITEM', 20, 'TOTAL');
+  let totalOrder = 0;
+  for (const { quantity, itemName, unitPricePence } of arr) {
+    const totalPerItem = unitPricePence * quantity;
+    const formattedTotalPerItem = formatCurrency(totalPerItem);
+    totalOrder += unitPricePence * quantity;
+    formatReceiptDetails(quantity.toString(), 8, itemName, 20, formattedTotalPerItem)
+  }
+
+  console.log(`\nTotal: ${formatCurrency(totalOrder)}`);
+}
+
+orderReceipt(order);
