@@ -8,17 +8,22 @@ let order = [
 ];
 
 
+function formatCurrency(total){
+  return (total/100).toFixed(2)
+}
+
 function orderReceipt(arr){
   
   console.log('QTY'.padEnd(8),'ITEM'.padEnd(18),'TOTAL')
   let totalOrder = 0
   for(const {quantity, itemName, unitPricePence} of arr){
-    const totalPerItem = ((unitPricePence * quantity) / 100).toFixed(2)
+    const totalPerItem = unitPricePence * quantity
+    const formattedTotalPerItem = formatCurrency(totalPerItem)
     totalOrder += unitPricePence * quantity
-    console.log(`${quantity.toString().padEnd(8)}${itemName.padEnd(20)}${totalPerItem}`)
+    console.log(`${quantity.toString().padEnd(8)}${itemName.padEnd(20)}${formattedTotalPerItem}`)
   }
 
-  console.log(`\nTotal: ${(totalOrder/100).toFixed(2)}`)
+  console.log(`\nTotal: ${formatCurrency(totalOrder)}`)
 }
 
 orderReceipt(order)
