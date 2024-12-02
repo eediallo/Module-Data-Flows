@@ -18,7 +18,7 @@ function orderReceipt(){
     console.log(`${quantity.toString().padEnd(8)}${itemName.padEnd(20)}${totalPerItem}`)
   }
 
-  console.log(`Total: ${(totalOrder/100).toFixed(2)}`)
+  console.log(`\nTotal: ${(totalOrder/100).toFixed(2)}`)
 }
 
 orderReceipt()
