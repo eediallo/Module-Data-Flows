@@ -80,9 +80,9 @@ function render() {
     cell4.appendChild(changeBut);
     let readStatus = "";
     if (myLibrary[i].check == false) {
-      readStatus = "Yes";
+      readStatus = "NO";
     } else {
-      readStatus = "No";
+      readStatus = "YES";
     }
     changeBut.innerHTML = readStatus;
 
