@@ -2,7 +2,7 @@ let myLibrary = [];
 
 window.addEventListener("load", function (e) {
   populateStorage();
-  render();
+  // render();
 });
 
 function populateStorage() {
