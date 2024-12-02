@@ -9,7 +9,8 @@ let order = [
 
 
 function orderReceipt(){
-  console.log('QTY     ITEM                TOTAL')
+  
+  console.log('QTY'.padEnd(8),'ITEM'.padEnd(18),'TOTAL')
   let totalOrder = 0
   for(const {quantity, itemName, unitPricePence} of order){
     const totalPerItem = ((unitPricePence * quantity) / 100).toFixed(2)
