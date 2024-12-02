@@ -8,9 +8,8 @@ let order = [
 ];
 
 
-function formatCurrency(total){
-  return (total/100).toFixed(2)
-}
+const formatCurrency = (total) => (total/100).toFixed(2)
+
 
 function orderReceipt(arr){
   
