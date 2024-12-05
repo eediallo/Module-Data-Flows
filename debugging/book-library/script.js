@@ -36,6 +36,7 @@ function submit() {
     return false;
   } else {
     let book = new Book(title.value, author.value, pages.value, check.checked);
+    alert(`You've added title: ${book.title}`)
     myLibrary.push(book);
     render();
   }
