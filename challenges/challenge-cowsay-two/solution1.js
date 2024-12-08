@@ -22,6 +22,13 @@ let bottomLine = '-';
 let saying = '';
 
 // 3. Make a cow that takes a string
+const cow = `
+        \\\   ^__^
+         \\\  (oo)\\\_______
+            (__)\\\       )\\/\\
+                ||----w |
+                ||     ||
+`
 
 function cowsay(saying) {
 // how will you make the speech bubble contain the text?
