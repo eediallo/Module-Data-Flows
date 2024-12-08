@@ -29,7 +29,7 @@ rl.question("Please Enter the top Line: ", (top) => {
       bottomLine += bottom;
       saying += say;
       cowsay(saying);
-      console.log();
+      console.log(cow)
       rl.close();
     });
   });
