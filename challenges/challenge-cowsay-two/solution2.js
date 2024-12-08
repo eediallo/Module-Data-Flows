@@ -7,10 +7,10 @@ const process = require("node:process");
 // https://nodejs.dev/learn/accept-input-from-the-command-line-in-nodejs
 // =================
 
-// 1. Make  a command line interface.
+//Make  a command line interface.
 const rl = readline.createInterface(process.stdin, process.stdout);
 
-// 2. Make supplies for our speech bubble
+//Make supplies for our speech bubble
 let topLine = "";
 let bottomLine = "";
 let saying = "";
@@ -29,13 +29,11 @@ rl.question("Please Enter the top Line: ", (top) => {
       bottomLine += bottom;
       saying += say;
       cowsay(saying);
-      console.log(cow)
+      console.log(cow);
       rl.close();
     });
   });
 });
-
-// 3. Make a cow that takes a string
 
 function writeLine(line, saying) {
   process.stdout.write(" ");
