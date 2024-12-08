@@ -1,3 +1,4 @@
+const {argv} = require('node:process')
 // =================
 // Stripped down cowsayer CLI, 
 // no libraries
@@ -7,6 +8,12 @@
 // 1. Accept arguments
 
 // how will you accept arguments?
+
+//require at least one additional argument
+if(argv.length === 2){
+    console.log('Should accept at least one argument')
+    process.exit(1)
+}
 
 // 2. Make supplies for our speech bubble
 
