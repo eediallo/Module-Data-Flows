@@ -14,6 +14,13 @@ const rl = readline.createInterface(process.stdin, process.stdout);
 let topLine = "";
 let bottomLine = "";
 let saying = "";
+const cow = `
+        \\\   ^__^
+         \\\  (oo)\\\_______
+            (__)\\\       )\\/\\
+                ||----w |
+                ||     ||
+`;
 
 rl.question("Please Enter the top Line: ", (top) => {
   rl.question("Please Enter the bottom line: ", (bottom) => {
@@ -21,8 +28,8 @@ rl.question("Please Enter the top Line: ", (top) => {
       topLine += top;
       bottomLine += bottom;
       saying += say;
-      cowsay(saying)
-      console.log()
+      cowsay(saying);
+      console.log();
       rl.close();
     });
   });
@@ -44,6 +51,3 @@ function cowsay(saying) {
   console.log();
   writeLine(bottomLine, saying);
 }
-
-// 4. Use readline to get a string from the terminal
-// (with a prompt so it's clearer what we want)
