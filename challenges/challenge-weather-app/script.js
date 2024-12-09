@@ -1,8 +1,11 @@
+const state = {
+  weatherData: {},
+  photos: {},
+  isFetching: false,
+};
 
-
-let isFetching = false;
 async function getWeatherData() {
-  if (isFetching) {
+  if (state.isFetching) {
     console.warn("Fetching is in progress. Please wait");
     return;
   }
@@ -17,7 +20,8 @@ async function getWeatherData() {
     }
 
     const weatherData = await response.json();
-    console.log(weatherData);
+    state.weatherData = weatherData;
+    // console.log(weatherData);
   } catch (error) {
     console.error(error.message);
   }
@@ -26,7 +30,7 @@ async function getWeatherData() {
 getWeatherData();
 
 async function getPhotos() {
-  if (isFetching) {
+  if (state.isFetching) {
     console.warn("Fetching is in progress. Please wait");
     return;
   }
@@ -41,10 +45,13 @@ async function getPhotos() {
     }
 
     const photos = await response.json();
-    console.log(photos, '<----photos');
+    state.photos = photos;
+    // console.log(photos, "<----photos");
   } catch (error) {
     console.error(error.message);
   }
 }
 
 getPhotos();
+
+console.log(state)
