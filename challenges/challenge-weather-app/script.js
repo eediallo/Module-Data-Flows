@@ -27,8 +27,6 @@ async function getWeatherData() {
   }
 }
 
-getWeatherData();
-
 async function getPhotos() {
   if (state.isFetching) {
     console.warn("Fetching is in progress. Please wait");
@@ -36,7 +34,7 @@ async function getPhotos() {
   }
 
   const url =
-    "https://api.unsplash.com/search/photos?query=snow&client_id=ds-h-C1-el1wmZC5mvMG9sgSp2jkWFbCZSUqKxwPVxo";
+    `https://api.unsplash.com/search/photos?query=${state.weatherData.weather[0].description}&client_id=ds-h-C1-el1wmZC5mvMG9sgSp2jkWFbCZSUqKxwPVxo`;
 
   try {
     const response = await fetch(url);
@@ -52,6 +50,11 @@ async function getPhotos() {
   }
 }
 
-getPhotos();
 
-console.log(state)
+async function fetchData() {
+  await getWeatherData();
+  await getPhotos();
+  console.log(state);
+}
+
+fetchData()
