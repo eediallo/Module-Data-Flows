@@ -2,16 +2,19 @@ const state = {
   weatherData: {},
   photos: {},
   isFetching: false,
+  weatherAPIKey: config.weather_API_Key,
+  unsplashAccessKey: config.unsplash_access_key,
 };
 
+const weatherAPIKey = config.weather_API_Key;
+console.log(weatherAPIKey);
 async function getWeatherData() {
   if (state.isFetching) {
     console.warn("Fetching is in progress. Please wait");
     return;
   }
 
-  const url =
-    "http://api.openweathermap.org/data/2.5/weather?q=london&appid=3b3e64be7a14413a3311c4198bbe9582";
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=london&appid=${state.weatherAPIKey}`;
 
   try {
     const response = await fetch(url);
@@ -33,8 +36,7 @@ async function getPhotos() {
     return;
   }
 
-  const url =
-    `https://api.unsplash.com/search/photos?query=${state.weatherData.weather[0].description}&client_id=ds-h-C1-el1wmZC5mvMG9sgSp2jkWFbCZSUqKxwPVxo`;
+  const url = `https://api.unsplash.com/search/photos?query=${state.weatherData.weather[0].description}&client_id=${state.unsplashAccessKey}`;
 
   try {
     const response = await fetch(url);
@@ -50,11 +52,10 @@ async function getPhotos() {
   }
 }
 
-
 async function fetchData() {
   await getWeatherData();
   await getPhotos();
   console.log(state);
 }
 
-fetchData()
+fetchData();
