@@ -40,13 +40,16 @@ async function fetchData() {
   } finally {
     state.isFetching = false;
   }
+
+  console.log(state.photos);
 }
 
 fetchData();
 
 const thumbs = document.querySelector("#thumbs");
 const mainPhoto = document.querySelector("#photo");
-console.log(mainPhoto, "<====main photo");
+const conditions = document.querySelector("#conditions");
+const creditUser = document.querySelector("#credit-user");
 
 function createThumbCard(photo) {
   const thumbCard = document.createElement("section");
@@ -62,8 +65,10 @@ function createThumbCard(photo) {
 
   // Add click event listener to load full image
   aEl.addEventListener("click", (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     loadMainImage(photo.urls.full, photo.alt_description);
+    //display user name
+    creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
   });
 
   return thumbCard;
@@ -72,6 +77,7 @@ function createThumbCard(photo) {
 function updateUI() {
   const thumbCards = state.photos.results.map(createThumbCard);
   thumbs.append(...thumbCards);
+  conditions.textContent = state.weatherData.weather[0].description;
 }
 function loadMainImage(url, alt) {
   const mainImg = document.querySelector("#main-img");
