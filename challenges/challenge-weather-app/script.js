@@ -6,56 +6,54 @@ const state = {
   unsplashAccessKey: config.unsplash_access_key,
 };
 
-const weatherAPIKey = config.weather_API_Key;
-console.log(weatherAPIKey);
 async function getWeatherData() {
-  if (state.isFetching) {
-    console.warn("Fetching is in progress. Please wait");
-    return;
-  }
-
   const url = `http://api.openweathermap.org/data/2.5/weather?q=london&appid=${state.weatherAPIKey}`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.error(`Response status: ${response.status}`);
-    }
-
-    const weatherData = await response.json();
-    state.weatherData = weatherData;
-    // console.log(weatherData);
-  } catch (error) {
-    console.error(error.message);
+  const response = await fetch(url);
+  if (!response.ok) {
+    console.error(`Response status: ${response.status}`);
   }
+  return response.json();
 }
 
 async function getPhotos() {
-  if (state.isFetching) {
-    console.warn("Fetching is in progress. Please wait");
-    return;
-  }
-
   const url = `https://api.unsplash.com/search/photos?query=${state.weatherData.weather[0].description}&client_id=${state.unsplashAccessKey}`;
+  const response = await fetch(url);
 
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.error(`Response status: ${response.status}`);
-    }
-
-    const photos = await response.json();
-    state.photos = photos;
-    // console.log(photos, "<----photos");
-  } catch (error) {
-    console.error(error.message);
+  if (!response.ok) {
+    console.error(`Response status: ${response.status}`);
   }
+  return await response.json();
 }
 
 async function fetchData() {
-  await getWeatherData();
-  await getPhotos();
-  console.log(state);
+  state.isFetching = true;
+  try {
+    const weatherData = await getWeatherData();
+    state.weatherData = weatherData;
+
+    const photos = await getPhotos();
+    state.photos = photos;
+
+
+    state.photos.results.forEach(createThumb)
+  } catch (error) {
+    console.error(error.message);
+  } finally {
+    state.isFetching = false;
+  }
 }
 
 fetchData();
+
+
+const thumbs = document.querySelector("#thumbs");
+function createThumb(thumbImg) {
+  const thumbSection = document.createElement("section");
+  const img = document.createElement("img");
+  img.setAttribute("src", thumbImg.urls.thumb);
+  img.setAttribute("alt", thumbImg.alt_description);
+  thumbSection.append(img);
+  thumbSection.style.backgroundColor = "red";
+
+  thumbs.append(thumbSection);
+}
