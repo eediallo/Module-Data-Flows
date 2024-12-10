@@ -34,8 +34,7 @@ async function fetchData() {
     const photos = await getPhotos();
     state.photos = photos;
 
-
-    state.photos.results.forEach(createThumb)
+    updateUI();
   } catch (error) {
     console.error(error.message);
   } finally {
@@ -45,15 +44,19 @@ async function fetchData() {
 
 fetchData();
 
-
 const thumbs = document.querySelector("#thumbs");
-function createThumb(thumbImg) {
-  const thumbSection = document.createElement("section");
+
+function createThumbCard(thumbImg) {
+  const thumbCard = document.createElement("section");
   const img = document.createElement("img");
   img.setAttribute("src", thumbImg.urls.thumb);
   img.setAttribute("alt", thumbImg.alt_description);
-  thumbSection.append(img);
-  thumbSection.style.backgroundColor = "red";
+  thumbCard.append(img);
+  thumbCard.style.backgroundColor = "red";
+  return thumbCard;
+}
 
-  thumbs.append(thumbSection);
+function updateUI() {
+  const thumbCards = state.photos.results.map(createThumbCard);
+  thumbs.append(...thumbCards);
 }
