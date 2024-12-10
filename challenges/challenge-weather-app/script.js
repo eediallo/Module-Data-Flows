@@ -46,12 +46,15 @@ fetchData();
 
 const thumbs = document.querySelector("#thumbs");
 
-function createThumbCard(thumbImg) {
+function createThumbCard(photo) {
   const thumbCard = document.createElement("section");
+  const aEl = document.createElement("a");
+  aEl.setAttribute("href", photo.urls.full);
   const img = document.createElement("img");
-  img.setAttribute("src", thumbImg.urls.thumb);
-  img.setAttribute("alt", thumbImg.alt_description);
-  thumbCard.append(img);
+  img.setAttribute("src", photo.urls.thumb);
+  img.setAttribute("alt", photo.alt_description);
+  aEl.append(img);
+  thumbCard.append(aEl);
   thumbCard.style.backgroundColor = "red";
   return thumbCard;
 }
