@@ -45,21 +45,36 @@ async function fetchData() {
 fetchData();
 
 const thumbs = document.querySelector("#thumbs");
+const mainPhoto = document.querySelector("#photo");
+console.log(mainPhoto, "<====main photo");
 
 function createThumbCard(photo) {
   const thumbCard = document.createElement("section");
   const aEl = document.createElement("a");
   aEl.setAttribute("href", photo.urls.full);
+  aEl.classList.add("id", "to-main-img");
   const img = document.createElement("img");
   img.setAttribute("src", photo.urls.thumb);
   img.setAttribute("alt", photo.alt_description);
   aEl.append(img);
   thumbCard.append(aEl);
   thumbCard.style.backgroundColor = "red";
+
+  // Add click event listener to load full image
+  aEl.addEventListener("click", (event) => {
+    event.preventDefault(); 
+    loadMainImage(photo.urls.full, photo.alt_description);
+  });
+
   return thumbCard;
 }
 
 function updateUI() {
   const thumbCards = state.photos.results.map(createThumbCard);
   thumbs.append(...thumbCards);
+}
+function loadMainImage(url, alt) {
+  const mainImg = document.querySelector("#main-img");
+  mainImg.setAttribute("src", url);
+  mainImg.setAttribute("alt", alt);
 }
