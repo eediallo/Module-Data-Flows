@@ -1,13 +1,28 @@
+const thumbs = document.querySelector("#thumbs");
+const mainPhoto = document.querySelector("#photo");
+const conditions = document.querySelector("#conditions");
+const creditUser = document.querySelector("#credit-user");
+const searchTerm = document.querySelector("#search-tf");
+const searchBtn = document.querySelector(".search__btn");
+
 const state = {
   weatherData: {},
   photos: {},
   isFetching: false,
   weatherAPIKey: config.weather_API_Key,
   unsplashAccessKey: config.unsplash_access_key,
+  city: "",
 };
 
+// set city on clicked before fetching data
+searchBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  state.city = searchTerm.value;
+  fetchData();
+});
+
 async function getWeatherData() {
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=london&appid=${state.weatherAPIKey}`;
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${state.city}&appid=${state.weatherAPIKey}`;
   const response = await fetch(url);
   if (!response.ok) {
     console.error(`Response status: ${response.status}`);
@@ -44,13 +59,6 @@ async function fetchData() {
   console.log(state.photos);
 }
 
-fetchData();
-
-const thumbs = document.querySelector("#thumbs");
-const mainPhoto = document.querySelector("#photo");
-const conditions = document.querySelector("#conditions");
-const creditUser = document.querySelector("#credit-user");
-
 function createThumbCard(photo) {
   const thumbCard = document.createElement("section");
   const aEl = document.createElement("a");
@@ -69,6 +77,7 @@ function createThumbCard(photo) {
     loadMainImage(photo.urls.full, photo.alt_description);
     //display user name
     creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
+    creditUser.setAttribute("href", photo.user.links.portfolio);
   });
 
   return thumbCard;
