@@ -1,11 +1,11 @@
 const gallery = document.createElement("div");
 gallery.classList.add("photo-gallery");
-const displayBogBtn = document.createElement("button");
-displayBogBtn.textContent = "Click to display random dog";
+const displayDogBtn = document.createElement("button");
+displayDogBtn.textContent = "Click to display random dog";
 const ul = document.createElement("ul");
 const loadMsgEl = document.querySelector(".loading-msg");
 
-document.body.append(gallery, displayBogBtn, ul);
+document.body.append(gallery, displayDogBtn, ul);
 
 const state = {
   dogData: {},
@@ -56,4 +56,4 @@ function displayDogImage() {
   ul.append(li);
 }
 
-displayBogBtn.addEventListener("click", fetchRandomDogImage);
+displayDogBtn.addEventListener("click", fetchRandomDogImage);
