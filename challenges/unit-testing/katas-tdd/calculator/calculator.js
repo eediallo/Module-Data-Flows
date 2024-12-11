@@ -16,6 +16,9 @@ function add(numbers) {
     const nums = numbers.split(",");
     for (let num of nums) {
       num = Number(num);
+      if (num > 1000) {
+        continue;
+      }
       sum += num;
     }
   }

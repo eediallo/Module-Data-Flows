@@ -22,8 +22,15 @@ test("return number if param length is 1", () => {
 });
 
 test("return sum of numbers if length of param is greater than 1", () => {
-  const str = "9, 1";
+  const str = "9, 1, 9, 1, 9, 1";
   const currentInput = add(str);
-  const targetOutput = 10;
+  const targetOutput = 30;
+  expect(currentInput).toEqual(targetOutput);
+});
+
+test("ignore numbers greater than 1000", () => {
+  const str = "200000, 1";
+  const currentInput = add(str);
+  const targetOutput = 1;
   expect(currentInput).toEqual(targetOutput);
 });
