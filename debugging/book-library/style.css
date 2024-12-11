@@ -17,3 +17,10 @@
 button.btn-info {
   margin: 20px;
 }
+
+.error-loading-msg {
+  color: red;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}

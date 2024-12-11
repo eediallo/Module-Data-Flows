@@ -4,6 +4,7 @@ const conditions = document.querySelector("#conditions");
 const creditUser = document.querySelector("#credit-user");
 const searchTerm = document.querySelector("#search-tf");
 const searchBtn = document.querySelector(".search__btn");
+const loadingMsgEl = document.querySelector(".loading-msg");
 
 const state = {
   weatherData: {},
@@ -40,7 +41,17 @@ async function getPhotos() {
   return await response.json();
 }
 
+function msgToUser(element, isError) {
+  if (!isError) {
+    element.textContent = "Data is loading. Please wait!";
+  } else {
+    element.textContent =
+      "Data fetching failed! Please refresh the page and try again";
+  }
+}
+
 async function fetchData() {
+  msgToUser(loadingMsgEl, false);
   state.isFetching = true;
   try {
     const weatherData = await getWeatherData();
@@ -50,8 +61,10 @@ async function fetchData() {
     state.photos = photos;
 
     updateUI();
+    loadingMsgEl.remove(); // Remove loading message only if there is no error
   } catch (error) {
-    console.error(error.message);
+    msgToUser(loadingMsgEl, true);
+    console.error(error);
   } finally {
     state.isFetching = false;
   }
