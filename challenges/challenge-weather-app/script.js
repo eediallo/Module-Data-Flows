@@ -28,14 +28,16 @@ const state = {
   thumbnail: {
     activeThumbnail: activeThumbnail,
     handleActiveThumbnail: (thumbCard) => {
-      if (this.activeThumbnail) {
+      if (state.thumbnail.activeThumbnail) {
         // Remove data-active attribute from any previously active thumbnail
-        activeThumbnail.removeAttribute("data-active");
-        activeThumbnail.style.border = "";
+        state.thumbnail.activeThumbnail.removeAttribute("data-active");
+        state.thumbnail.activeThumbnail.style.border = "";
       }
       // Set data-active attribute on the clicked thumbnail
       thumbCard.setAttribute("data-active", "true");
       thumbCard.style.border = "3px solid white";
+      // Update the activeThumbnail reference
+      state.thumbnail.activeThumbnail = thumbCard;
     },
   },
 };
