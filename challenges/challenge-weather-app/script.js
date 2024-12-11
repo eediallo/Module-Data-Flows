@@ -55,8 +55,6 @@ async function fetchData() {
   } finally {
     state.isFetching = false;
   }
-
-  console.log(state.photos);
 }
 
 function createThumbCard(photo) {
