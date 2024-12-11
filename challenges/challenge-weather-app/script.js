@@ -13,6 +13,17 @@ const state = {
   weatherAPIKey: config.weather_API_Key,
   unsplashAccessKey: config.unsplash_access_key,
   city: "",
+  feedbackService: {
+    hasDataLoadSuccessfully: true,
+    feedbackMsg: this.hasDataLoadSuccessfully
+      ? "Data is loading. Please wait!"
+      : "Data fetching failed! Please refresh the page and try again",
+    styleFeedbackMsg: (element) => {
+      element.style.textAlign = "center";
+      element.style.fontSize = "20px";
+      element.style.color = this.hasDataLoadSuccessfully ? "black" : "red";
+    },
+  },
 };
 
 // set city on clicked before fetching data
@@ -43,10 +54,11 @@ async function getPhotos() {
 
 function msgToUser(element, isError) {
   if (!isError) {
-    element.textContent = "Data is loading. Please wait!";
+    element.textContent = state.feedbackService.feedbackMsg;
+    state.feedbackService.styleFeedbackMsg(element);
   } else {
-    element.textContent =
-      "Data fetching failed! Please refresh the page and try again";
+    element.textContent = state.feedbackService.feedbackMsg;
+    state.feedbackService.styleFeedbackMsg(element);
   }
 }
 
