@@ -1,13 +1,10 @@
 const gallery = document.createElement("div");
 gallery.classList.add("photo-gallery");
-const btn1 = document.createElement("button");
-btn1.textContent = "button 1";
-const btn2 = document.createElement("button");
-btn2.textContent = "button 2";
+const displayBogBtn = document.createElement("button");
+displayBogBtn.textContent = "Click to display random dog";
 const ul = document.createElement("ul");
 
-document.body.append(gallery, btn1, btn2, ul);
-console.log(document.body);
+document.body.append(gallery, displayBogBtn, ul);
 
 const state = {
   dogData: {},
@@ -30,13 +27,22 @@ async function fetchRandomDogImage() {
   try {
     const dogData = await fetchDogData();
     state.dogData = dogData;
+
+    displayDogImage();
   } catch (error) {
     console.error(error);
   } finally {
     state.isFetching = false;
   }
-
-  console.log(state);
 }
 
-fetchRandomDogImage();
+function displayDogImage() {
+  const li = document.createElement("li");
+  const img = document.createElement("img");
+  img.setAttribute("src", state.dogData.message);
+  li.append(img);
+  li.style.listStyle = "none";
+  ul.append(li);
+}
+
+displayBogBtn.addEventListener("click", fetchRandomDogImage);
