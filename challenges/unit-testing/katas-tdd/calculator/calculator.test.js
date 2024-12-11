@@ -13,3 +13,10 @@ test("return 0 if param is empty", () => {
   const targetOutput = 0;
   expect(currentInput).toEqual(targetOutput);
 });
+
+test("return number if param length is 1", () => {
+  const str = "9";
+  const currentInput = add(str);
+  const targetOutput = 9;
+  expect(currentInput).toEqual(targetOutput);
+});
