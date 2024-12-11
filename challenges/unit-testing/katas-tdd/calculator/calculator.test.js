@@ -34,3 +34,11 @@ test("ignore numbers greater than 1000", () => {
   const targetOutput = 1;
   expect(currentInput).toEqual(targetOutput);
 });
+
+test("throw an error if numbers contain negative values", () => {
+  const targetOutput = "negatives not allowed: -3";
+  expect(() => {
+    const str = "200000, 1, -3";
+    add(str);
+  }).toThrow(targetOutput);
+});

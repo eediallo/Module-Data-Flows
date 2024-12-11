@@ -19,6 +19,9 @@ function add(numbers) {
       if (num > 1000) {
         continue;
       }
+      if (num < 0) {
+        throw new Error(`negatives not allowed: ${num}`);
+      }
       sum += num;
     }
   }
