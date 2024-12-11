@@ -12,6 +12,7 @@ function add(numbers) {
     return Number(numbers);
   }
 
+  const negativeValues = [];
   if (numbers.length > 1) {
     const nums = numbers.split(",");
     for (let num of nums) {
@@ -20,15 +21,16 @@ function add(numbers) {
         continue;
       }
       if (num < 0) {
-        throw new Error(`negatives not allowed: ${num}`);
+        negativeValues.push(num);
       }
       sum += num;
     }
-  }
 
+    if (negativeValues.length > 0) {
+      throw new Error(`negatives not allowed: ${negativeValues.join(", ")}`);
+    }
+  }
   return sum;
 }
-
-add("5,6");
 
 module.exports = add;
