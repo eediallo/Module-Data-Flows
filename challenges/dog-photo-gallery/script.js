@@ -10,13 +10,13 @@ document.body.append(gallery, displayBogBtn, ul);
 const state = {
   dogData: {},
   isFetching: false,
-  loadingMsg: this.isFetching
-    ? "Data is loading. Please wait!"
-    : "Data failed to load. Please try again",
 };
 
-function displayDataLoadingStatus() {
-  return (loadMsgEl.textContent = state.loadingMsg);
+function displayDataLoadingStatus(isLoading) {
+  const loadingMsg = isLoading
+    ? "Data is loading. Please wait!"
+    : "Data failed to load. Please try again";
+  loadMsgEl.textContent = loadingMsg;
 }
 
 async function fetchDogData() {
@@ -31,8 +31,8 @@ async function fetchDogData() {
 }
 
 async function fetchRandomDogImage() {
-  displayDataLoadingStatus();
   state.isFetching = true;
+  displayDataLoadingStatus(true);
   try {
     const dogData = await fetchDogData();
     state.dogData = dogData;
@@ -41,6 +41,7 @@ async function fetchRandomDogImage() {
     loadMsgEl.remove();
   } catch (error) {
     console.error(error);
+    displayDataLoadingStatus(false);
   } finally {
     state.isFetching = false;
   }
