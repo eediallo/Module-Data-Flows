@@ -5,6 +5,7 @@ const creditUser = document.querySelector("#credit-user");
 const searchTerm = document.querySelector("#search-tf");
 const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
+const activeThumbnail = document.querySelector('[data-active="true"]');
 
 const state = {
   weatherData: {},
@@ -22,6 +23,19 @@ const state = {
       element.style.textAlign = "center";
       element.style.fontSize = "20px";
       element.style.color = this.hasDataLoadSuccessfully ? "black" : "red";
+    },
+  },
+  thumbnail: {
+    activeThumbnail: activeThumbnail,
+    handleActiveThumbnail: (thumbCard) => {
+      if (this.activeThumbnail) {
+        // Remove data-active attribute from any previously active thumbnail
+        activeThumbnail.removeAttribute("data-active");
+        activeThumbnail.style.border = "";
+      }
+      // Set data-active attribute on the clicked thumbnail
+      thumbCard.setAttribute("data-active", "true");
+      thumbCard.style.border = "3px solid white";
     },
   },
 };
@@ -92,13 +106,15 @@ function createThumbCard(photo) {
   img.setAttribute("alt", photo.alt_description);
   aEl.append(img);
   thumbCard.append(aEl);
-  thumbCard.style.backgroundColor = "red";
-
+  thumbCard.classList.add("thumb-card");
   // Add click event listener to load full image
   aEl.addEventListener("click", (event) => {
     event.preventDefault();
+
+    state.thumbnail.handleActiveThumbnail(thumbCard);
+
     loadMainImage(photo.urls.full, photo.alt_description);
-    //display user name
+    //display user name et link to portfolio
     creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
     creditUser.setAttribute("href", photo.user.links.portfolio);
   });
