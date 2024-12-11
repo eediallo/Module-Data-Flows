@@ -5,12 +5,24 @@ function add(numbers) {
   }
 
   if (numbers === "") {
-    return 0;
+    return sum;
   }
 
   if (numbers.length === 1) {
     return Number(numbers);
   }
+
+  if (numbers.length > 1) {
+    const nums = numbers.split(",");
+    for (let num of nums) {
+      num = Number(num);
+      sum += num;
+    }
+  }
+
+  return sum;
 }
+
+add("5,6");
 
 module.exports = add;

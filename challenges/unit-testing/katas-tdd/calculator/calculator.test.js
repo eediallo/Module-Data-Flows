@@ -20,3 +20,10 @@ test("return number if param length is 1", () => {
   const targetOutput = 9;
   expect(currentInput).toEqual(targetOutput);
 });
+
+test("return sum of numbers if length of param is greater than 1", () => {
+  const str = "9, 1";
+  const currentInput = add(str);
+  const targetOutput = 10;
+  expect(currentInput).toEqual(targetOutput);
+});
