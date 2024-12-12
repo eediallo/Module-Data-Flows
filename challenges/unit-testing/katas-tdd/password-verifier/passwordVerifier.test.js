@@ -18,4 +18,10 @@ describe("password verifier", () => {
     const targetOutput = "Password rejected";
     expect(currentInput).toBe(targetOutput);
   });
+
+  test("rejected password without a least one number", () => {
+    const currentInput = verify("HelloElhadj");
+    const targetOutput = "Password rejected";
+    expect(currentInput).toBe(targetOutput);
+  });
 });

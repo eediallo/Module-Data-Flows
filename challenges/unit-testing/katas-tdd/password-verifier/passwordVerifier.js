@@ -11,12 +11,11 @@ function verifier(password) {
     return "Password rejected";
   }
 
-  return 'Password Accepted'
+  return "Password Accepted";
 }
 
 function includesUpperCaseLetter(str) {
-  return Boolean(str.match(/[A-Z]/g));
+  return Boolean(str.match(/[A-Z]/g) && str.match(/[0-9]/g));
 }
-
 
 module.exports = verifier;
