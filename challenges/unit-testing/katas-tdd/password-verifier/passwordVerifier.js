@@ -1,6 +1,6 @@
 function verifier(password) {
   const passwordRejected = "Password rejected";
-  if (password === null) {
+  if (password == null) {
     return passwordRejected;
   }
 
