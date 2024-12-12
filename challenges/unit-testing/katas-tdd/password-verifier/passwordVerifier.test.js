@@ -6,4 +6,10 @@ describe("password verifier", () => {
     const targetOutput = "Password rejected";
     expect(currentInput).toBe(targetOutput);
   });
+
+  test("rejects a null password", () => {
+    const currentInput = verify(null);
+    const targetOutput = "Password rejected";
+    expect(currentInput).toBe(targetOutput);
+  });
 });
