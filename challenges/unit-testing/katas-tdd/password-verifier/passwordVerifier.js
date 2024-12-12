@@ -1,20 +1,21 @@
 function verifier(password) {
+  const passwordRejected = "Password rejected";
   if (password === null) {
-    return "Password rejected";
+    return passwordRejected;
   }
 
   if (password.length < 8) {
-    return "Password rejected";
+    return passwordRejected;
   }
 
-  if (!includesUpperCaseLetter(password)) {
-    return "Password rejected";
+  if (!includesUpperCaseLetterAndNumber(password)) {
+    return passwordRejected;
   }
 
   return "Password Accepted";
 }
 
-function includesUpperCaseLetter(str) {
+function includesUpperCaseLetterAndNumber(str) {
   return Boolean(str.match(/[A-Z]/g) && str.match(/[0-9]/g));
 }
 
