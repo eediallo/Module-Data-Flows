@@ -7,7 +7,15 @@ test("returns I if passed 1 as an argument", function () {
 });
 
 test("returns II if passed 2 as an argument", function () {
-  const currentInput = convertToNewRoman(2);
-  const targetOutput = "II";
+  const currentInput = convertToNewRoman(3);
+  const targetOutput = "III";
   expect(currentInput).toBe(targetOutput);
 });
+
+test("returns V if passed 5 as an argument", function () {
+  const currentInput = convertToNewRoman(5);
+  const targetOutput = "V";
+  expect(currentInput).toBe(targetOutput);
+});
+
+
