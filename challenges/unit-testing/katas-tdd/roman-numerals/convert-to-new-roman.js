@@ -1,4 +1,4 @@
-const numerals = {
+const romanNumerals = {
   one: "I",
   four: "IV",
   five: "V",
@@ -14,33 +14,33 @@ const numerals = {
   thousand: "M",
 };
 
-function convertToNewRoman(n) {
-  let numeral = "";
+function convertToNewRoman(number) {
+  let result = "";
 
-  const values = [
-    { value: 1000, numeral: numerals.thousand },
-    { value: 900, numeral: numerals.nineHundred },
-    { value: 500, numeral: numerals.fiveHundred },
-    { value: 400, numeral: numerals.fourHundred },
-    { value: 100, numeral: numerals.hundred },
-    { value: 90, numeral: numerals.ninety },
-    { value: 50, numeral: numerals.fifty },
-    { value: 40, numeral: numerals.forty },
-    { value: 10, numeral: numerals.ten },
-    { value: 9, numeral: numerals.nine },
-    { value: 5, numeral: numerals.five },
-    { value: 4, numeral: numerals.four },
-    { value: 1, numeral: numerals.one },
+  const numeralValues = [
+    { value: 1000, numeral: romanNumerals.thousand },
+    { value: 900, numeral: romanNumerals.nineHundred },
+    { value: 500, numeral: romanNumerals.fiveHundred },
+    { value: 400, numeral: romanNumerals.fourHundred },
+    { value: 100, numeral: romanNumerals.hundred },
+    { value: 90, numeral: romanNumerals.ninety },
+    { value: 50, numeral: romanNumerals.fifty },
+    { value: 40, numeral: romanNumerals.forty },
+    { value: 10, numeral: romanNumerals.ten },
+    { value: 9, numeral: romanNumerals.nine },
+    { value: 5, numeral: romanNumerals.five },
+    { value: 4, numeral: romanNumerals.four },
+    { value: 1, numeral: romanNumerals.one },
   ];
 
-  for (let i = 0; i < values.length; i++) {
-    while (n >= values[i].value) {
-      numeral += values[i].numeral;
-      n -= values[i].value;
+  for (let i = 0; i < numeralValues.length; i++) {
+    while (number >= numeralValues[i].value) {
+      result += numeralValues[i].numeral;
+      number -= numeralValues[i].value;
     }
   }
 
-  return numeral;
+  return result;
 }
 
 module.exports = convertToNewRoman;
