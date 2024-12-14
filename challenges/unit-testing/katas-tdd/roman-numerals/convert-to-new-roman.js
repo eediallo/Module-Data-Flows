@@ -16,18 +16,6 @@ const numerals = {
 
 function convertToNewRoman(n) {
   let numeral = "";
-  if (n === 1) {
-    return numerals.one;
-  }
-
-  // handle 1 to 3
-  for (let i = 1; i < 4; i++) {
-    numeral += numerals.one;
-  }
-
-  if (n === 5) {
-    return numerals.five;
-  }
 
   const values = [
     { value: 1000, numeral: numerals.thousand },
@@ -44,6 +32,13 @@ function convertToNewRoman(n) {
     { value: 4, numeral: numerals.four },
     { value: 1, numeral: numerals.one },
   ];
+
+  for (let i = 0; i < values.length; i++) {
+    while (n >= values[i].value) {
+      numeral += values[i].numeral;
+      n -= values[i].value;
+    }
+  }
 
   return numeral;
 }
