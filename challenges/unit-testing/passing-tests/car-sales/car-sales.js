@@ -6,16 +6,9 @@ function sales(carsSold) {
     Toyota: 0,
   };
 
-  for (let carDetails of carsSold) {
-    const {make, price} = carDetails
-    if (make === "Ford") {
-      totals.Ford += price;
-    } else if (make === "Honda") {
-      totals.Honda = price;
-    } else if (make === "Land Rover") {
-      totals["Land Rover"] += price;
-    } else {
-      totals.Toyota += price;
+  for (let { make, price } of carsSold) {
+    if (totals.hasOwnProperty(make)) {
+      totals[make] += price;
     }
   }
 
