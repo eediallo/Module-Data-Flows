@@ -7,7 +7,6 @@ function sales(carsSold) {
   };
 
   for (let carDetails of carsSold) {
-    console.log(carDetails.make);
     if (carDetails.make === "Ford") {
       totals.Ford += carDetails.price;
     } else if (carDetails.make === "Honda") {
