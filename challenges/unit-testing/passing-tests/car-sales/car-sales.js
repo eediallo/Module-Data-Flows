@@ -7,14 +7,15 @@ function sales(carsSold) {
   };
 
   for (let carDetails of carsSold) {
-    if (carDetails.make === "Ford") {
-      totals.Ford += carDetails.price;
-    } else if (carDetails.make === "Honda") {
-      totals.Honda = carDetails.price;
-    } else if (carDetails.make === "Land Rover") {
-      totals["Land Rover"] += carDetails.price;
+    const {make, price} = carDetails
+    if (make === "Ford") {
+      totals.Ford += price;
+    } else if (make === "Honda") {
+      totals.Honda = price;
+    } else if (make === "Land Rover") {
+      totals["Land Rover"] += price;
     } else {
-      totals.Toyota += carDetails.price;
+      totals.Toyota += price;
     }
   }
 
