@@ -63,3 +63,10 @@ test("returns CM if passed 900 as an argument", function () {
   const targetOutput = "CM";
   expect(currentInput).toBe(targetOutput);
 });
+
+
+test("returns MCMXCIV if passed 1994 as an argument", function () {
+  const currentInput = convertToNewRoman(1994);
+  const targetOutput = "MCMXCIV";
+  expect(currentInput).toBe(targetOutput);
+});
