@@ -47,3 +47,11 @@ test("returns XC if passed 90 as an argument", function () {
   const targetOutput = "XC";
   expect(currentInput).toBe(targetOutput);
 });
+
+
+
+test("returns CD if passed 400 as an argument", function () {
+  const currentInput = convertToNewRoman(400);
+  const targetOutput = "CD";
+  expect(currentInput).toBe(targetOutput);
+});
