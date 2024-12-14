@@ -28,3 +28,9 @@ test("returns IV if passed 4 as an argument", function () {
   const targetOutput = "IV";
   expect(currentInput).toBe(targetOutput);
 });
+
+test("returns IX if passed 9 as an argument", function () {
+  const currentInput = convertToNewRoman(9);
+  const targetOutput = "IX";
+  expect(currentInput).toBe(targetOutput);
+});
