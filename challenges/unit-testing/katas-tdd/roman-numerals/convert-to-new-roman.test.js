@@ -40,3 +40,10 @@ test("returns XL if passed 40 as an argument", function () {
   const targetOutput = "XL";
   expect(currentInput).toBe(targetOutput);
 });
+
+
+test("returns XC if passed 90 as an argument", function () {
+  const currentInput = convertToNewRoman(90);
+  const targetOutput = "XC";
+  expect(currentInput).toBe(targetOutput);
+});
