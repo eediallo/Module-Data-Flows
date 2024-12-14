@@ -29,6 +29,22 @@ function convertToNewRoman(n) {
     return numerals.five;
   }
 
+  const values = [
+    { value: 1000, numeral: numerals.thousand },
+    { value: 900, numeral: numerals.nineHundred },
+    { value: 500, numeral: numerals.fiveHundred },
+    { value: 400, numeral: numerals.fourHundred },
+    { value: 100, numeral: numerals.hundred },
+    { value: 90, numeral: numerals.ninety },
+    { value: 50, numeral: numerals.fifty },
+    { value: 40, numeral: numerals.forty },
+    { value: 10, numeral: numerals.ten },
+    { value: 9, numeral: numerals.nine },
+    { value: 5, numeral: numerals.five },
+    { value: 4, numeral: numerals.four },
+    { value: 1, numeral: numerals.one },
+  ];
+
   return numeral;
 }
 
