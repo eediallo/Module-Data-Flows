@@ -55,3 +55,11 @@ test("returns CD if passed 400 as an argument", function () {
   const targetOutput = "CD";
   expect(currentInput).toBe(targetOutput);
 });
+
+
+
+test("returns CM if passed 900 as an argument", function () {
+  const currentInput = convertToNewRoman(900);
+  const targetOutput = "CM";
+  expect(currentInput).toBe(targetOutput);
+});
