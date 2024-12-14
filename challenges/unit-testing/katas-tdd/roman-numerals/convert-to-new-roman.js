@@ -1,14 +1,19 @@
 const numerals = {
   one: "I",
+  four: "IV",
   five: "V",
+  nine: "IX",
   ten: "X",
+  forty: "XL",
   fifty: "L",
+  ninety: "XC",
   hundred: "C",
+  fourHundred: "CD",
   fiveHundred: "D",
+  nineHundred: "CM",
   thousand: "M",
 };
 
-const fiveThounsand = "VM";
 function convertToNewRoman(n) {
   let numeral = "";
   if (n === 1) {
