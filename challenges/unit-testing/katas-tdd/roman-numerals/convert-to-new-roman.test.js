@@ -17,5 +17,14 @@ test("returns V if passed 5 as an argument", function () {
   const targetOutput = "V";
   expect(currentInput).toBe(targetOutput);
 });
+test("returns III if passed 3 as an argument", function () {
+  const currentInput = convertToNewRoman(3);
+  const targetOutput = "III";
+  expect(currentInput).toBe(targetOutput);
+});
 
-
+test("returns IV if passed 4 as an argument", function () {
+  const currentInput = convertToNewRoman(4);
+  const targetOutput = "IV";
+  expect(currentInput).toBe(targetOutput);
+});
