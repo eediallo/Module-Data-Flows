@@ -8,12 +8,7 @@ function add(numbers) {
     return sum;
   }
 
-  if (numbers.length === 1) {
-    return Number(numbers);
-  }
-
   const negativeValues = [];
-  if (numbers.length > 1) {
     const nums = numbers.split(",");
     for (let num of nums) {
       num = Number(num);
@@ -29,7 +24,6 @@ function add(numbers) {
     if (negativeValues.length > 0) {
       throw new Error(`negatives not allowed: ${negativeValues.join(", ")}`);
     }
-  }
   return sum;
 }
 
