@@ -43,11 +43,18 @@ test("throw an error if numbers contain negative values", () => {
   }).toThrow(targetOutput);
 });
 
-
 test("throw and error and display if multiple negative values", () => {
-    const targetOutput = "negatives not allowed: -3, -4";
-    expect(() => {
-      const str = "200000, 1, -3, -4";
-      add(str);
-    }).toThrow(targetOutput);
-  });
+  const targetOutput = "negatives not allowed: -3, -4";
+  expect(() => {
+    const str = "200000, 1, -3, -4";
+    add(str);
+  }).toThrow(targetOutput);
+});
+
+test("throw and error and display -10 if input is -10", () => {
+  const targetOutput = "negatives not allowed: -10";
+  expect(() => {
+    const str = "-10";
+    add(str);
+  }).toThrow(targetOutput);
+});
