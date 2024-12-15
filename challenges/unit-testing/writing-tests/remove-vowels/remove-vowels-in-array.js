@@ -1,7 +1,7 @@
-let removeVowels = require("./remove-vowels");
-
 function removeVowelsFromWords(words) {
-  return removeVowels(words);
+  return words.map(function (word) {
+    return word.replace(/[aeiou]/gi, "");
+  });
 }
 
 module.exports = removeVowelsFromWords;
