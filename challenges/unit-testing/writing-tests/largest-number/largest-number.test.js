@@ -7,8 +7,11 @@ test("returns largest number in array", function () {
   expect(currentInput).toEqual(targetOutput);
 });
 
-// example
-// input: [3, 21, 88, 4, 36];
-// expected: 88;
-
-// also test that the original array hasn't changed
+test("check if original has not changed", function () {
+  const numbers = [3, 21, 88, 4, 36];
+  const originalNumbers = [...numbers];
+  const currentInput = getLargestNumber(numbers);
+  const targetOutput = 88;
+  expect(currentInput).toEqual(targetOutput);
+  expect(numbers).toEqual(originalNumbers);
+});
