@@ -7,6 +7,14 @@ test("returns largest number in array", function () {
   expect(currentInput).toEqual(targetOutput);
 });
 
+test("returns Infinity in [-1, 9, Infinity, 900000]", function () {
+  const numbers = [-1, 9, Infinity, 900000];
+  const currentInput = getLargestNumber(numbers);
+  const targetOutput = Infinity;
+  expect(currentInput).toEqual(targetOutput);
+});
+
+
 test("check if original has not changed", function () {
   const numbers = [3, 21, 88, 4, 36];
   const originalNumbers = [...numbers];
