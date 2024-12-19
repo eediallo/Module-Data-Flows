@@ -7,35 +7,74 @@ const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 let activeThumbnail = document.querySelector('[data-active="true"]');
 
-class State {
-  constructor(isFetching, city = "", weatherData = {}, photos = {}) {
+// class State {
+//   constructor(isFetching, city = "", weatherData = {}, photos = {}) {
+//     this.isFetching = isFetching;
+//     this.city = city;
+//     this.weatherData = weatherData;
+//     this.photos = photos;
+//   }
+
+//   static weatherAPIKey = config.weather_API_Key;
+//   static unsplashAccessKey = config.unsplash_access_key;
+
+//   async fetchWeatherData() {
+//     const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${State.weatherAPIKey}`;
+//     const response = await fetch(url);
+//     if (!response.ok) {
+//       console.error(`Response status: ${response.status}`);
+//     }
+//     this.weatherData = await response.json();
+//   }
+
+//   async fetchPhotos() {
+//     const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${State.unsplashAccessKey}`;
+//     const response = await fetch(url);
+//     if (!response.ok) {
+//       console.error(`Response status: ${response.status}`);
+//     }
+//     return await response.json();
+//   }
+// }
+
+class Weather {
+  constructor(isFetching) {
     this.isFetching = isFetching;
-    this.city = city;
-    this.weatherData = weatherData;
-    this.photos = photos;
+    this.weatherData = {};
+    this.city = "";
   }
 
   static weatherAPIKey = config.weather_API_Key;
-  static unsplashAccessKey = config.unsplash_access_key;
 
   async fetchWeatherData() {
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${State.weatherAPIKey}`;
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${Weather.weatherAPIKey}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Response status: ${response.status}`);
     }
     this.weatherData = await response.json();
   }
+}
+
+class Photos {
+  constructor(weatherData) {
+    this.weatherData = weatherData;
+    this.photos = {};
+  }
+
+  static unsplashAccessKey = config.unsplash_access_key;
 
   async fetchPhotos() {
-    const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${State.unsplashAccessKey}`;
+    const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${Photos.unsplashAccessKey}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Response status: ${response.status}`);
     }
-    return await response.json();
+    this.photos = await response.json();
   }
 }
+
+const weather = new Weather();
 
 class UI {
   constructor() {
@@ -82,12 +121,12 @@ class UI {
     activeThumbnail = thumbCard;
   }
 
-  updateUI(state) {
-    this.thumbCards = state.photos.results.map((photo) =>
+  updateUI(weather, photos) {
+    this.thumbCards = photos.results.map((photo) =>
       this.createThumbCard(photo)
     );
     thumbs.append(...this.thumbCards);
-    conditions.textContent = state.weatherData.weather[0].description;
+    conditions.textContent = weather.weather[0].description;
   }
 
   updateDataLoadingStatus(element, isError) {
@@ -124,6 +163,7 @@ class UI {
   }
 }
 
+const ui = new UI();
 class FeedbackServices {
   constructor(hasDataLoadSuccessfully) {
     this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
@@ -145,23 +185,21 @@ class FeedbackServices {
   }
 }
 
-const state = new State(false, true);
-const ui = new UI();
-
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
-  state.city = searchTerm.value;
-  state.isFetching = true;
+  weather.city = searchTerm.value;
+  weather.isFetching = true;
   ui.updateDataLoadingStatus(loadingMsgEl, false);
   try {
-    await state.fetchWeatherData();
-    const photos = await state.fetchPhotos();
-    state.photos = photos;
-    ui.updateUI(state);
+    await weather.fetchWeatherData();
+    const photos = new Photos(weather.weatherData);
+    await photos.fetchPhotos();
+    ui.updateUI(weather.weatherData, photos.photos);
+    ui.updateDataLoadingStatus(loadingMsgEl, false);
     loadingMsgEl.remove();
   } catch (error) {
     ui.updateDataLoadingStatus(loadingMsgEl, true);
   } finally {
-    state.isFetching = false;
+    weather.isFetching = false;
   }
 });
