@@ -7,6 +7,46 @@ const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 const activeThumbnail = document.querySelector('[data-active="true"]');
 
+class State {
+  constructor(
+    isFetching,
+    hasDataLoadSuccessfully,
+    successMsg,
+    unsuccessMsg,
+    city = "",
+    weatherData = {},
+    photos = {}
+  ) {
+    this.isFetching = isFetching;
+    this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
+    this.successMsg = successMsg;
+    this.unsuccessMsg = unsuccessMsg;
+    this.city = city;
+    this.weatherData = weatherData;
+    this.photos = photos;
+  }
+
+  static weatherAPIKey = config.weather_API_Key;
+  static unsplashAccessKey = config.unsplash_access_key;
+
+  feedbackService() {
+    return this.hasDataLoadSuccessfully ? this.successMsg : this.unsuccessMsg;
+  }
+
+  styleFeedbackMsg(element) {
+    element.style.textAlign = "center";
+    element.style.fontSize = "20px";
+    element.style.color = this.hasDataLoadSuccessfully ? "black" : "red";
+  }
+}
+
+const st = new State(
+  false,
+  true,
+  "Data is loading. Please wait!",
+  "Data fetching failed! Please refresh the page and try again"
+);
+
 const state = {
   weatherData: {},
   photos: {},
@@ -45,12 +85,12 @@ const state = {
 // set city on clicked before fetching data
 searchBtn.addEventListener("click", (event) => {
   event.preventDefault();
-  state.city = searchTerm.value;
+  st.city = searchTerm.value;
   fetchData();
 });
 
 async function getWeatherData() {
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${state.city}&appid=${state.weatherAPIKey}`;
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${st.city}&appid=${State.weatherAPIKey}`;
   const response = await fetch(url);
   if (!response.ok) {
     console.error(`Response status: ${response.status}`);
@@ -59,7 +99,7 @@ async function getWeatherData() {
 }
 
 async function getPhotos() {
-  const url = `https://api.unsplash.com/search/photos?query=${state.weatherData.weather[0].description}&client_id=${state.unsplashAccessKey}`;
+  const url = `https://api.unsplash.com/search/photos?query=${st.weatherData.weather[0].description}&client_id=${State.unsplashAccessKey}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -70,7 +110,10 @@ async function getPhotos() {
 
 function msgToUser(element, isError) {
   if (!isError) {
-    element.textContent = state.feedbackService.feedbackMsg;
+    element.textContent = st.feedbackService(
+      "Data is loading. Please wait!",
+      "Data fetching failed! Please refresh the page and try again"
+    );
     state.feedbackService.styleFeedbackMsg(element);
   } else {
     element.textContent = state.feedbackService.feedbackMsg;
@@ -80,13 +123,13 @@ function msgToUser(element, isError) {
 
 async function fetchData() {
   msgToUser(loadingMsgEl, false);
-  state.isFetching = true;
+  st.isFetching = true;
   try {
     const weatherData = await getWeatherData();
-    state.weatherData = weatherData;
+    st.weatherData = weatherData;
 
     const photos = await getPhotos();
-    state.photos = photos;
+    st.photos = photos;
 
     updateUI();
     loadingMsgEl.remove(); // Remove loading message only if there is no error
@@ -94,7 +137,7 @@ async function fetchData() {
     msgToUser(loadingMsgEl, true);
     console.error(error);
   } finally {
-    state.isFetching = false;
+    st.isFetching = false;
   }
 }
 
@@ -125,7 +168,7 @@ function createThumbCard(photo) {
 }
 
 function updateUI() {
-  const thumbCards = state.photos.results.map(createThumbCard);
+  const thumbCards = st.photos.results.map(createThumbCard);
   thumbs.append(...thumbCards);
   conditions.textContent = state.weatherData.weather[0].description;
 }
