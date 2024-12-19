@@ -5,7 +5,7 @@ const creditUser = document.querySelector("#credit-user");
 const searchTerm = document.querySelector("#search-tf");
 const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
-const activeThumbnail = document.querySelector('[data-active="true"]');
+let activeThumbnail = document.querySelector('[data-active="true"]');
 
 class State {
   constructor(
@@ -60,6 +60,7 @@ class State {
 class UI {
   constructor() {
     this.thumbCards = [];
+    this.dataAttribute = "data-active";
   }
 
   createThumbCard(photo) {
@@ -77,7 +78,7 @@ class UI {
     aEl.addEventListener("click", (event) => {
       event.preventDefault();
 
-      aThumbnail.handleActiveThumbnail(thumbCard);
+      this.handleActiveThumbnail(thumbCard);
 
       this.loadMainImage(photo.urls.full, photo.alt_description);
       //display user name et link to portfolio
@@ -86,6 +87,19 @@ class UI {
     });
 
     return thumbCard;
+  }
+
+  handleActiveThumbnail(thumbCard) {
+    if (activeThumbnail) {
+      // Remove data-active attribute from any previously active thumbnail
+      activeThumbnail.removeAttribute(this.dataAttribute);
+      activeThumbnail.style.border = "";
+    }
+    // Set data-active attribute on the clicked thumbnail
+    thumbCard.setAttribute(this.dataAttribute, "true");
+    thumbCard.style.border = "3px solid white";
+    // Update the activeThumbnail reference
+    activeThumbnail = thumbCard;
   }
 
   updateUI(state) {
@@ -113,29 +127,8 @@ class UI {
   }
 }
 
-class ActiveThumbnail {
-  constructor(activeThumbnail, dataAttribute) {
-    this.activeThumbnail = activeThumbnail;
-    this.dataAttribute = dataAttribute;
-  }
-
-  handleActiveThumbnail(thumbCard) {
-    if (this.activeThumbnail) {
-      // Remove data-active attribute from any previously active thumbnail
-      this.activeThumbnail.removeAttribute(this.dataAttribute);
-      this.activeThumbnail.style.border = "";
-    }
-    // Set data-active attribute on the clicked thumbnail
-    thumbCard.setAttribute(this.dataAttribute, "true");
-    thumbCard.style.border = "3px solid white";
-    // Update the activeThumbnail reference
-    this.activeThumbnail = thumbCard;
-  }
-}
-
 const state = new State(false, true);
 const ui = new UI();
-const aThumbnail = new ActiveThumbnail(activeThumbnail, "data-active");
 
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
