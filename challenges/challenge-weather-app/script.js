@@ -40,6 +40,26 @@ class State {
   }
 }
 
+class ActiveThumbnail {
+  constructor(activeThumbnail, thumbCard) {
+    this.activeThumbnail = activeThumbnail;
+    this.thumbCard = thumbCard;
+  }
+
+  handleActiveThumbnail(dataAttribute) {
+    if (this.activeThumbnail) {
+      // Remove data-active attribute from any previously active thumbnail
+      this.activeThumbnail.removeAttribute(dataAttribute);
+      this.activeThumbnail.style.border = "";
+    }
+    // Set data-active attribute on the clicked thumbnail
+    this.thumbCard.setAttribute(dataAttribute, "true");
+    this.thumbCard.style.border = "3px solid white";
+    // Update the activeThumbnail reference
+    this.activeThumbnail = this.thumbCard;
+  }
+}
+
 const st = new State(
   false,
   true,
