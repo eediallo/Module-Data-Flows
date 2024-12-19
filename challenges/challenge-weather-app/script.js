@@ -9,10 +9,16 @@ let activeThumbnail = document.querySelector('[data-active="true"]');
 
 //==========Weather Class======================
 class Weather {
-  constructor(isFetching) {
+  constructor(isFetching, city = "") {
     this.isFetching = isFetching;
     this.weatherData = {};
-    this.city = "";
+    this.city = city;
+
+    if (typeof this.city !== "string") {
+      loadingMsgEl.textContent =
+        "City must be a string: eg - London , New York";
+      throw new Error(`Invalid city: ${this.city}`);
+    }
   }
 
   static weatherAPIKey = config.weather_API_Key;
@@ -175,11 +181,12 @@ searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
 
-  //handle empty city
-  if (weather.city === "") {
-    loadingMsgEl.textContent = "City must not be Empty";
+  //handle empty city or numeric string
+  if (weather.city === "" || !isNaN(weather.city)) {
+    loadingMsgEl.textContent =
+      "Invalid city: must be a non empty string: eg- London, Conakry, Manchester etc...";
     dataLoadingMsg.styleFeedbackMsg(loadingMsgEl);
-    return;
+    throw new Error(`Invalid city: ${weather.city}`);
   }
   weather.isFetching = true;
   dataLoadingMsg.isError = false;
