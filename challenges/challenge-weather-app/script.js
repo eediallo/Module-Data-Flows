@@ -175,7 +175,7 @@ searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
 
-  //check if city is not empty
+  //handle empty city
   if (weather.city === "") {
     loadingMsgEl.textContent = "City must not be Empty";
     dataLoadingMsg.styleFeedbackMsg(loadingMsgEl);
