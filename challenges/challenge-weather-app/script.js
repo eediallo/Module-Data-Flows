@@ -11,16 +11,12 @@ class State {
   constructor(
     isFetching,
     hasDataLoadSuccessfully,
-    successMsg,
-    unsuccessMsg,
     city = "",
     weatherData = {},
     photos = {}
   ) {
     this.isFetching = isFetching;
     this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
-    this.successMsg = successMsg;
-    this.unsuccessMsg = unsuccessMsg;
     this.city = city;
     this.weatherData = weatherData;
     this.photos = photos;
@@ -28,9 +24,12 @@ class State {
 
   static weatherAPIKey = config.weather_API_Key;
   static unsplashAccessKey = config.unsplash_access_key;
+  static unsuccessMsg =
+    "Data fetching failed! Please refresh the page and try again";
+  static successMsg = "Data is loading. Please wait!";
 
   get feedbackService() {
-    return this.hasDataLoadSuccessfully ? this.successMsg : this.unsuccessMsg;
+    return this.hasDataLoadSuccessfully ? State.successMsg : State.unsuccessMsg;
   }
 
   styleFeedbackMsg(element) {
@@ -60,18 +59,9 @@ class ActiveThumbnail {
   }
 }
 
-const st = new State(
-  false,
-  true,
-  "Data is loading. Please wait!",
-  "Data fetching failed! Please refresh the page and try again"
-);
+const st = new State(false, true);
 
-const aThumbnail = new ActiveThumbnail(
-  activeThumbnail,
-  "data-active"
-);
-
+const aThumbnail = new ActiveThumbnail(activeThumbnail, "data-active");
 
 // set city on clicked before fetching data
 searchBtn.addEventListener("click", (event) => {
