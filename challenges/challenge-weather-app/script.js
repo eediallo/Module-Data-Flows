@@ -145,7 +145,7 @@ class FeedbackServices {
   }
 }
 
-const state = new State(false, true);
+const state = new State(false);
 const ui = new UI();
 
 searchBtn.addEventListener("click", async (event) => {
