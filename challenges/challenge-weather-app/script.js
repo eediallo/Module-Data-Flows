@@ -126,9 +126,12 @@ class MainImageHandler {
 
 //==========DataLoadingMsgHandler class======================
 class DataLoadingMsgHandler {
-  updateDataLoadingStatus(element, isError) {
-    const dataLoadingMsg = new DataLoadingMsg(isError);
-    if (!isError) {
+  constructor(isError) {
+    this.isError = isError;
+  }
+  updateDataLoadingStatus(element) {
+    const dataLoadingMsg = new DataLoadingMsg();
+    if (!this.isError) {
       element.textContent = dataLoadingMsg.getDataLoadingMsg;
       dataLoadingMsg.styleFeedbackMsg(element);
     } else {
@@ -155,7 +158,7 @@ class DataLoadingMsg {
 
   styleFeedbackMsg(element) {
     element.style.textAlign = "center";
-    element.style.fontSize = "20px";
+    element.style.fontSize = "30px";
     element.style.color = !this.hasDataLoadSuccessfully ? "black" : "red";
   }
 }
@@ -165,27 +168,33 @@ const weather = new Weather();
 const thumbnailHandler = new ThumbnailHandler();
 const mainImageHandler = new MainImageHandler();
 const dataLoadingMsgHandler = new DataLoadingMsgHandler();
+const dataLoadingMsg = new DataLoadingMsg();
 
 //Event listener
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
+
+  //check if city is not empty
   if (weather.city === "") {
-    loadingMsgEl.innerHTML = "City Must not be Empty";
-    return
+    loadingMsgEl.textContent = "City must not be Empty";
+    dataLoadingMsg.styleFeedbackMsg(loadingMsgEl);
+    return;
   }
   weather.isFetching = true;
+  dataLoadingMsg.isError = false;
   dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
   try {
     await weather.fetchWeatherData();
     const photos = new Photos(weather.weatherData);
     await photos.fetchPhotos();
     thumbnailHandler.updateUI(weather.weatherData, photos.photos);
-    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
+    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl);
     loadingMsgEl.remove();
   } catch (error) {
-    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, true);
+    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl);
   } finally {
     weather.isFetching = false;
+    dataLoadingMsg.isError = true;
   }
 });
