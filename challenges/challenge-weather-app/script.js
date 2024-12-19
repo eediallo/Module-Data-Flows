@@ -7,35 +7,6 @@ const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 let activeThumbnail = document.querySelector('[data-active="true"]');
 
-// class State {
-//   constructor(isFetching, city = "", weatherData = {}, photos = {}) {
-//     this.isFetching = isFetching;
-//     this.city = city;
-//     this.weatherData = weatherData;
-//     this.photos = photos;
-//   }
-
-//   static weatherAPIKey = config.weather_API_Key;
-//   static unsplashAccessKey = config.unsplash_access_key;
-
-//   async fetchWeatherData() {
-//     const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${State.weatherAPIKey}`;
-//     const response = await fetch(url);
-//     if (!response.ok) {
-//       console.error(`Response status: ${response.status}`);
-//     }
-//     this.weatherData = await response.json();
-//   }
-
-//   async fetchPhotos() {
-//     const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${State.unsplashAccessKey}`;
-//     const response = await fetch(url);
-//     if (!response.ok) {
-//       console.error(`Response status: ${response.status}`);
-//     }
-//     return await response.json();
-//   }
-// }
 
 class Weather {
   constructor(isFetching) {
