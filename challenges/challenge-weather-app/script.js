@@ -29,7 +29,7 @@ class State {
   static weatherAPIKey = config.weather_API_Key;
   static unsplashAccessKey = config.unsplash_access_key;
 
-  feedbackService() {
+  get feedbackService() {
     return this.hasDataLoadSuccessfully ? this.successMsg : this.unsuccessMsg;
   }
 
@@ -110,13 +110,10 @@ async function getPhotos() {
 
 function msgToUser(element, isError) {
   if (!isError) {
-    element.textContent = st.feedbackService(
-      "Data is loading. Please wait!",
-      "Data fetching failed! Please refresh the page and try again"
-    );
+    element.textContent = st.feedbackService;
     state.feedbackService.styleFeedbackMsg(element);
   } else {
-    element.textContent = state.feedbackService.feedbackMsg;
+    element.textContent = st.feedbackService;
     state.feedbackService.styleFeedbackMsg(element);
   }
 }
