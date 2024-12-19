@@ -103,7 +103,7 @@ class ThumbnailHandler {
 class MainImageHandler {
   loadMainImage(url, alt) {
     const mainImg = document.querySelector("#main-img");
-    const lowResImg = document.createElement("img");
+    const lowResImg = new Image();
     lowResImg.setAttribute("src", url);
     lowResImg.setAttribute("alt", alt);
     lowResImg.style.position = "absolute";
