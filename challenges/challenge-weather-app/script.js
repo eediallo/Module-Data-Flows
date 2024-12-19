@@ -8,12 +8,7 @@ const loadingMsgEl = document.querySelector(".loading-msg");
 let activeThumbnail = document.querySelector('[data-active="true"]');
 
 class State {
-  constructor(
-    isFetching,
-    city = "",
-    weatherData = {},
-    photos = {}
-  ) {
+  constructor(isFetching, city = "", weatherData = {}, photos = {}) {
     this.isFetching = isFetching;
     this.city = city;
     this.weatherData = weatherData;
@@ -108,8 +103,24 @@ class UI {
 
   loadMainImage(url, alt) {
     const mainImg = document.querySelector("#main-img");
-    mainImg.setAttribute("src", url);
-    mainImg.setAttribute("alt", alt);
+    const lowResImg = document.createElement("img");
+    lowResImg.setAttribute("src", url.replace("full", "thumb")); // Assuming the URL structure allows this
+    lowResImg.setAttribute("alt", alt);
+    lowResImg.style.position = "absolute";
+    lowResImg.style.top = "0";
+    lowResImg.style.left = "0";
+    lowResImg.style.width = "100%";
+    lowResImg.style.height = "100%";
+    lowResImg.style.objectFit = "cover";
+    mainImg.parentNode.appendChild(lowResImg);
+
+    const highResImg = new Image();
+    highResImg.src = url;
+    highResImg.onload = () => {
+      mainImg.setAttribute("src", url);
+      mainImg.setAttribute("alt", alt);
+      lowResImg.remove();
+    };
   }
 }
 
