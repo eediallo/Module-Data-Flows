@@ -7,18 +7,30 @@ const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 let activeThumbnail = document.querySelector('[data-active="true"]');
 
+//==========EmptyOrNumericCity Class======================
+class EmptyOrNumericCity {
+  constructor(city) {
+    this.city = city;
+  }
+
+  handleEmptyOrNumericCity(dataLoadingMsg) {
+    if (this.city === "" || !isNaN(this.city)) {
+      loadingMsgEl.textContent =
+        "Invalid city: must be a non empty string: eg- London, Conakry, Manchester etc...";
+      dataLoadingMsg.styleFeedbackMsg(loadingMsgEl);
+      throw new Error(`Invalid city: ${this.city}`);
+    }
+  }
+}
+const emptyOrNumericCity = new EmptyOrNumericCity();
+
 //==========Weather Class======================
 class Weather {
   constructor(isFetching, city = "") {
     this.isFetching = isFetching;
     this.weatherData = {};
     this.city = city;
-
-    if (typeof this.city !== "string") {
-      loadingMsgEl.textContent =
-        "City must be a string: eg - London , New York";
-      throw new Error(`Invalid city: ${this.city}`);
-    }
+    emptyOrNumericCity.handleEmptyOrNumericCity(this.city);
   }
 
   static weatherAPIKey = config.weather_API_Key;
@@ -181,22 +193,21 @@ searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
 
-  //handle empty city or numeric string
-  if (weather.city === "" || !isNaN(weather.city)) {
-    loadingMsgEl.textContent =
-      "Invalid city: must be a non empty string: eg- London, Conakry, Manchester etc...";
-    dataLoadingMsg.styleFeedbackMsg(loadingMsgEl);
-    throw new Error(`Invalid city: ${weather.city}`);
-  }
+  emptyOrNumericCity.city = weather.city;
+  emptyOrNumericCity.handleEmptyOrNumericCity(dataLoadingMsg); // handle empty or numeric string
+
   weather.isFetching = true;
   dataLoadingMsg.isError = false;
   dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
   try {
     await weather.fetchWeatherData();
+
     const photos = new Photos(weather.weatherData);
     await photos.fetchPhotos();
+
     thumbnailHandler.updateUI(weather.weatherData, photos.photos);
     dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl);
+
     loadingMsgEl.remove();
   } catch (error) {
     dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl);
