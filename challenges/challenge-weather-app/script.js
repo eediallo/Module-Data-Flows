@@ -99,7 +99,7 @@ class UI {
 
       aThumbnail.handleActiveThumbnail(thumbCard);
 
-      loadMainImage(photo.urls.full, photo.alt_description);
+      this.loadMainImage(photo.urls.full, photo.alt_description);
       //display user name et link to portfolio
       creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
       creditUser.setAttribute("href", photo.user.links.portfolio);
@@ -109,14 +109,31 @@ class UI {
   }
 
   updateUI(state) {
-    this.thumbCards = state.photos.results.map(this.createThumbCard);
+    this.thumbCards = state.photos.results.map(photo => this.createThumbCard(photo));
     thumbs.append(...this.thumbCards);
     conditions.textContent = state.weatherData.weather[0].description;
   }
+
+  msgToUser(element, isError) {
+    if (!isError) {
+      element.textContent = state.feedbackService;
+      state.styleFeedbackMsg(element);
+    } else {
+      element.textContent = state.feedbackService;
+      state.styleFeedbackMsg(element);
+    }
+  }
+
+  loadMainImage(url, alt) {
+    const mainImg = document.querySelector("#main-img");
+    mainImg.setAttribute("src", url);
+    mainImg.setAttribute("alt", alt);
+  }
 }
 
+
 const state = new State(false, true);
-const aThumbnail = new ActiveThumbnail(activeThumbnail, "data-active");
+const aThumbnail = new ActiveThumbnail(activeThumbnail, 'data-active')
 const ui = new UI();
 
 searchBtn.addEventListener("click", async (event) => {
@@ -127,20 +144,3 @@ searchBtn.addEventListener("click", async (event) => {
   state.photos = photos;
   ui.updateUI(state);
 });
-
-
-function msgToUser(element, isError) {
-  if (!isError) {
-    element.textContent = state.feedbackService;
-    state.styleFeedbackMsg(element);
-  } else {
-    element.textContent = state.feedbackService;
-    state.styleFeedbackMsg(element);
-  }
-}
-
-function loadMainImage(url, alt) {
-  const mainImg = document.querySelector("#main-img");
-  mainImg.setAttribute("src", url);
-  mainImg.setAttribute("alt", alt);
-}
