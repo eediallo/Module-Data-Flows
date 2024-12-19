@@ -41,22 +41,22 @@ class State {
 }
 
 class ActiveThumbnail {
-  constructor(activeThumbnail, thumbCard) {
+  constructor(activeThumbnail, dataAttribute) {
     this.activeThumbnail = activeThumbnail;
-    this.thumbCard = thumbCard;
+    this.dataAttribute = dataAttribute;
   }
 
-  handleActiveThumbnail(dataAttribute) {
+  handleActiveThumbnail(thumbCard) {
     if (this.activeThumbnail) {
       // Remove data-active attribute from any previously active thumbnail
-      this.activeThumbnail.removeAttribute(dataAttribute);
+      this.activeThumbnail.removeAttribute(this.dataAttribute);
       this.activeThumbnail.style.border = "";
     }
     // Set data-active attribute on the clicked thumbnail
-    this.thumbCard.setAttribute(dataAttribute, "true");
-    this.thumbCard.style.border = "3px solid white";
+    thumbCard.setAttribute(this.dataAttribute, "true");
+    thumbCard.style.border = "3px solid white";
     // Update the activeThumbnail reference
-    this.activeThumbnail = this.thumbCard;
+    this.activeThumbnail = thumbCard;
   }
 }
 
@@ -67,40 +67,11 @@ const st = new State(
   "Data fetching failed! Please refresh the page and try again"
 );
 
-const state = {
-  weatherData: {},
-  photos: {},
-  isFetching: false,
-  weatherAPIKey: config.weather_API_Key,
-  unsplashAccessKey: config.unsplash_access_key,
-  city: "",
-  feedbackService: {
-    hasDataLoadSuccessfully: true,
-    feedbackMsg: this.hasDataLoadSuccessfully
-      ? "Data is loading. Please wait!"
-      : "Data fetching failed! Please refresh the page and try again",
-    styleFeedbackMsg: (element) => {
-      element.style.textAlign = "center";
-      element.style.fontSize = "20px";
-      element.style.color = this.hasDataLoadSuccessfully ? "black" : "red";
-    },
-  },
-  thumbnail: {
-    activeThumbnail: activeThumbnail,
-    handleActiveThumbnail: (thumbCard) => {
-      if (state.thumbnail.activeThumbnail) {
-        // Remove data-active attribute from any previously active thumbnail
-        state.thumbnail.activeThumbnail.removeAttribute("data-active");
-        state.thumbnail.activeThumbnail.style.border = "";
-      }
-      // Set data-active attribute on the clicked thumbnail
-      thumbCard.setAttribute("data-active", "true");
-      thumbCard.style.border = "3px solid white";
-      // Update the activeThumbnail reference
-      state.thumbnail.activeThumbnail = thumbCard;
-    },
-  },
-};
+const aThumbnail = new ActiveThumbnail(
+  activeThumbnail,
+  "data-active"
+);
+
 
 // set city on clicked before fetching data
 searchBtn.addEventListener("click", (event) => {
@@ -131,10 +102,10 @@ async function getPhotos() {
 function msgToUser(element, isError) {
   if (!isError) {
     element.textContent = st.feedbackService;
-    state.feedbackService.styleFeedbackMsg(element);
+    st.styleFeedbackMsg(element);
   } else {
     element.textContent = st.feedbackService;
-    state.feedbackService.styleFeedbackMsg(element);
+    st.styleFeedbackMsg(element);
   }
 }
 
@@ -173,7 +144,7 @@ function createThumbCard(photo) {
   aEl.addEventListener("click", (event) => {
     event.preventDefault();
 
-    state.thumbnail.handleActiveThumbnail(thumbCard);
+    aThumbnail.handleActiveThumbnail(thumbCard);
 
     loadMainImage(photo.urls.full, photo.alt_description);
     //display user name et link to portfolio
@@ -187,7 +158,7 @@ function createThumbCard(photo) {
 function updateUI() {
   const thumbCards = st.photos.results.map(createThumbCard);
   thumbs.append(...thumbCards);
-  conditions.textContent = state.weatherData.weather[0].description;
+  conditions.textContent = st.weatherData.weather[0].description;
 }
 function loadMainImage(url, alt) {
   const mainImg = document.querySelector("#main-img");
