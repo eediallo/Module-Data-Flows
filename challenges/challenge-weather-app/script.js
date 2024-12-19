@@ -24,13 +24,6 @@ class State {
 
   static weatherAPIKey = config.weather_API_Key;
   static unsplashAccessKey = config.unsplash_access_key;
-  static unsuccessMsg =
-    "Data fetching failed! Please refresh the page and try again";
-  static successMsg = "Data is loading. Please wait!";
-
-  get feedbackService() {
-    return this.hasDataLoadSuccessfully ? State.successMsg : State.unsuccessMsg;
-  }
 
   async fetchWeatherData() {
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${State.weatherAPIKey}`;
@@ -48,12 +41,6 @@ class State {
       console.error(`Response status: ${response.status}`);
     }
     return await response.json();
-  }
-
-  styleFeedbackMsg(element) {
-    element.style.textAlign = "center";
-    element.style.fontSize = "20px";
-    element.style.color = this.hasDataLoadSuccessfully ? "black" : "red";
   }
 }
 
@@ -111,12 +98,13 @@ class UI {
   }
 
   updateDataLoadingStatus(element, isError) {
+    const feedbackService = new FeedbackServices(isError);
     if (!isError) {
-      element.textContent = state.feedbackService;
-      state.styleFeedbackMsg(element);
+      element.textContent = feedbackService.feedbackService;
+      feedbackService.styleFeedbackMsg(element);
     } else {
-      element.textContent = state.feedbackService;
-      state.styleFeedbackMsg(element);
+      element.textContent = feedbackService.feedbackService;
+      feedbackService.styleFeedbackMsg(element);
     }
   }
 
@@ -127,14 +115,44 @@ class UI {
   }
 }
 
+class FeedbackServices {
+  constructor(hasDataLoadSuccessfully) {
+    this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
+  }
+  static loadingMsg =
+    "Data fetching failed! Please refresh the page and try again";
+  static errorLoadingMsg = "Data is loading. Please wait!";
+
+  get feedbackService() {
+    return this.hasDataLoadSuccessfully
+      ? FeedbackServices.loadingMsg
+      : FeedbackServices.errorLoadingMsg;
+  }
+
+  styleFeedbackMsg(element) {
+    element.style.textAlign = "center";
+    element.style.fontSize = "20px";
+    element.style.color = !this.hasDataLoadSuccessfully ? "black" : "red";
+  }
+}
+
 const state = new State(false, true);
 const ui = new UI();
 
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   state.city = searchTerm.value;
-  await state.fetchWeatherData();
-  const photos = await state.fetchPhotos();
-  state.photos = photos;
-  ui.updateUI(state);
+  state.isFetching = true;
+  ui.updateDataLoadingStatus(loadingMsgEl, false);
+  try {
+    await state.fetchWeatherData();
+    const photos = await state.fetchPhotos();
+    state.photos = photos;
+    ui.updateUI(state);
+    loadingMsgEl.remove();
+  } catch (error) {
+    ui.updateDataLoadingStatus(loadingMsgEl, true);
+  } finally {
+    state.isFetching = false;
+  }
 });
