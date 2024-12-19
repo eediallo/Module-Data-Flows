@@ -7,37 +7,65 @@ const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 let activeThumbnail = document.querySelector('[data-active="true"]');
 
-class State {
-  constructor(isFetching, city = "", weatherData = {}, photos = {}) {
-    this.isFetching = isFetching;
+//==========EmptyOrNumericCity Class======================
+class EmptyOrNumericCity {
+  constructor(city) {
     this.city = city;
-    this.weatherData = weatherData;
-    this.photos = photos;
+  }
+
+  handleEmptyOrNumericCity(dataLoadingMsg) {
+    if (this.city === "" || !isNaN(this.city)) {
+      loadingMsgEl.textContent =
+        "Invalid city: must be a non empty string: eg- London, Conakry, Manchester etc...";
+      dataLoadingMsg.styleFeedbackMsg(loadingMsgEl);
+      throw new Error(`Invalid city: ${this.city}`);
+    }
+  }
+}
+const emptyOrNumericCity = new EmptyOrNumericCity();
+
+//==========Weather Class======================
+class Weather {
+  constructor(isFetching, city = "") {
+    this.isFetching = isFetching;
+    this.weatherData = {};
+    this.city = city;
+    emptyOrNumericCity.handleEmptyOrNumericCity(this.city);
   }
 
   static weatherAPIKey = config.weather_API_Key;
-  static unsplashAccessKey = config.unsplash_access_key;
 
   async fetchWeatherData() {
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${State.weatherAPIKey}`;
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${Weather.weatherAPIKey}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Response status: ${response.status}`);
     }
     this.weatherData = await response.json();
   }
+}
+
+//==========Photos Class======================
+class Photos {
+  constructor(weatherData) {
+    this.weatherData = weatherData;
+    this.photos = {};
+  }
+
+  static unsplashAccessKey = config.unsplash_access_key;
 
   async fetchPhotos() {
-    const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${State.unsplashAccessKey}`;
+    const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${Photos.unsplashAccessKey}`;
     const response = await fetch(url);
     if (!response.ok) {
       console.error(`Response status: ${response.status}`);
     }
-    return await response.json();
+    this.photos = await response.json();
   }
 }
 
-class UI {
+//==========ThumbnailHandler class======================
+class ThumbnailHandler {
   constructor() {
     this.thumbCards = [];
     this.dataAttribute = "data-active";
@@ -60,8 +88,8 @@ class UI {
 
       this.handleActiveThumbnail(thumbCard);
 
-      this.loadMainImage(photo.urls.full, photo.alt_description);
-      //display user name et link to portfolio
+      mainImageHandler.loadMainImage(photo.urls.full, photo.alt_description);
+      // Display user name and link to portfolio
       creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
       creditUser.setAttribute("href", photo.user.links.portfolio);
     });
@@ -71,40 +99,30 @@ class UI {
 
   handleActiveThumbnail(thumbCard) {
     if (activeThumbnail) {
-      // Remove data-active attribute from any previously active thumbnail
       activeThumbnail.removeAttribute(this.dataAttribute);
       activeThumbnail.style.border = "";
     }
-    // Set data-active attribute on the clicked thumbnail
     thumbCard.setAttribute(this.dataAttribute, "true");
     thumbCard.style.border = "3px solid white";
     // Update the activeThumbnail reference
     activeThumbnail = thumbCard;
   }
 
-  updateUI(state) {
-    this.thumbCards = state.photos.results.map((photo) =>
+  updateUI(weather, photos) {
+    this.thumbCards = photos.results.map((photo) =>
       this.createThumbCard(photo)
     );
     thumbs.append(...this.thumbCards);
-    conditions.textContent = state.weatherData.weather[0].description;
+    conditions.textContent = weather.weather[0].description;
   }
+}
 
-  updateDataLoadingStatus(element, isError) {
-    const feedbackService = new FeedbackServices(isError);
-    if (!isError) {
-      element.textContent = feedbackService.feedbackService;
-      feedbackService.styleFeedbackMsg(element);
-    } else {
-      element.textContent = feedbackService.feedbackService;
-      feedbackService.styleFeedbackMsg(element);
-    }
-  }
-
+//==========MainImageHandler class======================
+class MainImageHandler {
   loadMainImage(url, alt) {
     const mainImg = document.querySelector("#main-img");
-    const lowResImg = document.createElement("img");
-    lowResImg.setAttribute("src", url.replace("full", "thumb"));
+    const lowResImg = new Image();
+    lowResImg.setAttribute("src", url);
     lowResImg.setAttribute("alt", alt);
     lowResImg.style.position = "absolute";
     lowResImg.style.top = "0";
@@ -124,7 +142,25 @@ class UI {
   }
 }
 
-class FeedbackServices {
+//==========DataLoadingMsgHandler class======================
+class DataLoadingMsgHandler {
+  constructor(isError) {
+    this.isError = isError;
+  }
+  updateDataLoadingStatus(element) {
+    const dataLoadingMsg = new DataLoadingMsg();
+    if (!this.isError) {
+      element.textContent = dataLoadingMsg.getDataLoadingMsg;
+      dataLoadingMsg.styleFeedbackMsg(element);
+    } else {
+      element.textContent = dataLoadingMsg.getDataLoadingMsg;
+      dataLoadingMsg.styleFeedbackMsg(element);
+    }
+  }
+}
+
+//==========DataLoadingMsg class======================
+class DataLoadingMsg {
   constructor(hasDataLoadSuccessfully) {
     this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
   }
@@ -132,36 +168,51 @@ class FeedbackServices {
     "Data fetching failed! Please refresh the page and try again";
   static errorLoadingMsg = "Data is loading. Please wait!";
 
-  get feedbackService() {
+  get getDataLoadingMsg() {
     return this.hasDataLoadSuccessfully
-      ? FeedbackServices.loadingMsg
-      : FeedbackServices.errorLoadingMsg;
+      ? DataLoadingMsg.loadingMsg
+      : DataLoadingMsg.errorLoadingMsg;
   }
 
   styleFeedbackMsg(element) {
     element.style.textAlign = "center";
-    element.style.fontSize = "20px";
+    element.style.fontSize = "30px";
     element.style.color = !this.hasDataLoadSuccessfully ? "black" : "red";
   }
 }
 
-const state = new State(false);
-const ui = new UI();
+//==========Instantiation======================
+const weather = new Weather();
+const thumbnailHandler = new ThumbnailHandler();
+const mainImageHandler = new MainImageHandler();
+const dataLoadingMsgHandler = new DataLoadingMsgHandler();
+const dataLoadingMsg = new DataLoadingMsg();
 
+//Event listener
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
-  state.city = searchTerm.value;
-  state.isFetching = true;
-  ui.updateDataLoadingStatus(loadingMsgEl, false);
+  weather.city = searchTerm.value;
+
+  emptyOrNumericCity.city = weather.city;
+  emptyOrNumericCity.handleEmptyOrNumericCity(dataLoadingMsg); // handle empty or numeric string
+
+  weather.isFetching = true;
+  dataLoadingMsg.isError = false;
+  dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
   try {
-    await state.fetchWeatherData();
-    const photos = await state.fetchPhotos();
-    state.photos = photos;
-    ui.updateUI(state);
+    await weather.fetchWeatherData();
+
+    const photos = new Photos(weather.weatherData);
+    await photos.fetchPhotos();
+
+    thumbnailHandler.updateUI(weather.weatherData, photos.photos);
+    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl);
+
     loadingMsgEl.remove();
   } catch (error) {
-    ui.updateDataLoadingStatus(loadingMsgEl, true);
+    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl);
   } finally {
-    state.isFetching = false;
+    weather.isFetching = false;
+    dataLoadingMsg.isError = true;
   }
 });
