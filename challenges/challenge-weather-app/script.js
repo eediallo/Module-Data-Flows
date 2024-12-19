@@ -81,11 +81,9 @@ class ThumbnailHandler {
 
   handleActiveThumbnail(thumbCard) {
     if (activeThumbnail) {
-      // Remove data-active attribute from any previously active thumbnail
       activeThumbnail.removeAttribute(this.dataAttribute);
       activeThumbnail.style.border = "";
     }
-    // Set data-active attribute on the clicked thumbnail
     thumbCard.setAttribute(this.dataAttribute, "true");
     thumbCard.style.border = "3px solid white";
     // Update the activeThumbnail reference
