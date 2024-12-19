@@ -10,13 +10,11 @@ let activeThumbnail = document.querySelector('[data-active="true"]');
 class State {
   constructor(
     isFetching,
-    hasDataLoadSuccessfully,
     city = "",
     weatherData = {},
     photos = {}
   ) {
     this.isFetching = isFetching;
-    this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
     this.city = city;
     this.weatherData = weatherData;
     this.photos = photos;
