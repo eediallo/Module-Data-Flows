@@ -44,93 +44,6 @@ class Photos {
   }
 }
 
-// class UI {
-//   constructor() {
-//     this.thumbCards = [];
-//     this.dataAttribute = "data-active";
-//   }
-
-//   createThumbCard(photo) {
-//     const thumbCard = document.createElement("section");
-//     const aEl = document.createElement("a");
-//     aEl.setAttribute("href", photo.urls.full);
-//     aEl.classList.add("id", "to-main-img");
-//     const img = document.createElement("img");
-//     img.setAttribute("src", photo.urls.thumb);
-//     img.setAttribute("alt", photo.alt_description);
-//     aEl.append(img);
-//     thumbCard.append(aEl);
-//     thumbCard.classList.add("thumb-card");
-//     // Add click event listener to load full image
-//     aEl.addEventListener("click", (event) => {
-//       event.preventDefault();
-
-//       this.handleActiveThumbnail(thumbCard);
-
-//       this.loadMainImage(photo.urls.full, photo.alt_description);
-//       //display user name et link to portfolio
-//       creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
-//       creditUser.setAttribute("href", photo.user.links.portfolio);
-//     });
-
-//     return thumbCard;
-//   }
-
-//   handleActiveThumbnail(thumbCard) {
-//     if (activeThumbnail) {
-//       // Remove data-active attribute from any previously active thumbnail
-//       activeThumbnail.removeAttribute(this.dataAttribute);
-//       activeThumbnail.style.border = "";
-//     }
-//     // Set data-active attribute on the clicked thumbnail
-//     thumbCard.setAttribute(this.dataAttribute, "true");
-//     thumbCard.style.border = "3px solid white";
-//     // Update the activeThumbnail reference
-//     activeThumbnail = thumbCard;
-//   }
-
-//   updateUI(weather, photos) {
-//     this.thumbCards = photos.results.map((photo) =>
-//       ThumbCard.createThumbCard(photo)
-//     );
-//     thumbs.append(...this.thumbCards);
-//     conditions.textContent = weather.weather[0].description;
-//   }
-
-//   updateDataLoadingStatus(element, isError) {
-//     const feedbackService = new FeedbackServices(isError);
-//     if (!isError) {
-//       element.textContent = feedbackService.feedbackService;
-//       feedbackService.styleFeedbackMsg(element);
-//     } else {
-//       element.textContent = feedbackService.feedbackService;
-//       feedbackService.styleFeedbackMsg(element);
-//     }
-//   }
-
-//   loadMainImage(url, alt) {
-//     const mainImg = document.querySelector("#main-img");
-//     const lowResImg = document.createElement("img");
-//     lowResImg.setAttribute("src", url.replace("full", "thumb"));
-//     lowResImg.setAttribute("alt", alt);
-//     lowResImg.style.position = "absolute";
-//     lowResImg.style.top = "0";
-//     lowResImg.style.left = "0";
-//     lowResImg.style.width = "100%";
-//     lowResImg.style.height = "100%";
-//     lowResImg.style.objectFit = "cover";
-//     mainImg.parentNode.appendChild(lowResImg);
-
-//     const highResImg = new Image();
-//     highResImg.src = url;
-//     highResImg.onload = () => {
-//       mainImg.setAttribute("src", url);
-//       mainImg.setAttribute("alt", alt);
-//       lowResImg.remove();
-//     };
-//   }
-// }
-
 class ThumbnailHandler {
   constructor() {
     this.thumbCards = [];
@@ -189,7 +102,7 @@ class MainImageHandler {
   loadMainImage(url, alt) {
     const mainImg = document.querySelector("#main-img");
     const lowResImg = document.createElement("img");
-    lowResImg.setAttribute("src", url.replace("full", "thumb")); // Assuming the URL structure allows this
+    lowResImg.setAttribute("src", url);
     lowResImg.setAttribute("alt", alt);
     lowResImg.style.position = "absolute";
     lowResImg.style.top = "0";
