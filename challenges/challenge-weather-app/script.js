@@ -127,13 +127,13 @@ class MainImageHandler {
 //==========DataLoadingMsgHandler class======================
 class DataLoadingMsgHandler {
   updateDataLoadingStatus(element, isError) {
-    const feedbackService = new DataLoadingMsg(isError);
+    const dataLoadingMsg = new DataLoadingMsg(isError);
     if (!isError) {
-      element.textContent = feedbackService.feedbackService;
-      feedbackService.styleFeedbackMsg(element);
+      element.textContent = dataLoadingMsg.getDataLoadingMsg;
+      dataLoadingMsg.styleFeedbackMsg(element);
     } else {
-      element.textContent = feedbackService.feedbackService;
-      feedbackService.styleFeedbackMsg(element);
+      element.textContent = dataLoadingMsg.getDataLoadingMsg;
+      dataLoadingMsg.styleFeedbackMsg(element);
     }
   }
 }
@@ -147,7 +147,7 @@ class DataLoadingMsg {
     "Data fetching failed! Please refresh the page and try again";
   static errorLoadingMsg = "Data is loading. Please wait!";
 
-  get feedbackService() {
+  get getDataLoadingMsg() {
     return this.hasDataLoadSuccessfully
       ? DataLoadingMsg.loadingMsg
       : DataLoadingMsg.errorLoadingMsg;
@@ -170,6 +170,10 @@ const dataLoadingMsgHandler = new DataLoadingMsgHandler();
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
+  if (weather.city === "") {
+    loadingMsgEl.innerHTML = "City Must not be Empty";
+    return
+  }
   weather.isFetching = true;
   dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
   try {
