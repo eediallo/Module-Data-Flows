@@ -122,9 +122,9 @@ class MainImageHandler {
   }
 }
 
-class FeedbackHandler {
+class DataLoadingMsgHandler {
   updateDataLoadingStatus(element, isError) {
-    const feedbackService = new FeedbackServices(isError);
+    const feedbackService = new DataLoadingMsg(isError);
     if (!isError) {
       element.textContent = feedbackService.feedbackService;
       feedbackService.styleFeedbackMsg(element);
@@ -134,7 +134,7 @@ class FeedbackHandler {
     }
   }
 }
-class FeedbackServices {
+class DataLoadingMsg {
   constructor(hasDataLoadSuccessfully) {
     this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
   }
@@ -144,8 +144,8 @@ class FeedbackServices {
 
   get feedbackService() {
     return this.hasDataLoadSuccessfully
-      ? FeedbackServices.loadingMsg
-      : FeedbackServices.errorLoadingMsg;
+      ? DataLoadingMsg.loadingMsg
+      : DataLoadingMsg.errorLoadingMsg;
   }
 
   styleFeedbackMsg(element) {
@@ -158,22 +158,22 @@ class FeedbackServices {
 const weather = new Weather();
 const thumbnailHandler = new ThumbnailHandler();
 const mainImageHandler = new MainImageHandler();
-const feedbackHandler = new FeedbackHandler();
+const dataLoadingMsgHandler = new DataLoadingMsgHandler();
 
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
   weather.isFetching = true;
-  feedbackHandler.updateDataLoadingStatus(loadingMsgEl, false);
+  dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
   try {
     await weather.fetchWeatherData();
     const photos = new Photos(weather.weatherData);
     await photos.fetchPhotos();
     thumbnailHandler.updateUI(weather.weatherData, photos.photos);
-    feedbackHandler.updateDataLoadingStatus(loadingMsgEl, false);
+    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
     loadingMsgEl.remove();
   } catch (error) {
-    feedbackHandler.updateDataLoadingStatus(loadingMsgEl, true);
+    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, true);
   } finally {
     weather.isFetching = false;
   }
