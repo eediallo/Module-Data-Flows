@@ -104,7 +104,7 @@ class UI {
   loadMainImage(url, alt) {
     const mainImg = document.querySelector("#main-img");
     const lowResImg = document.createElement("img");
-    lowResImg.setAttribute("src", url.replace("full", "thumb")); // Assuming the URL structure allows this
+    lowResImg.setAttribute("src", url.replace("full", "thumb"));
     lowResImg.setAttribute("alt", alt);
     lowResImg.style.position = "absolute";
     lowResImg.style.top = "0";
