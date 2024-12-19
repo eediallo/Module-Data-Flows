@@ -59,19 +59,19 @@ class ActiveThumbnail {
   }
 }
 
-const st = new State(false, true);
+const state = new State(false, true);
 
 const aThumbnail = new ActiveThumbnail(activeThumbnail, "data-active");
 
 // set city on clicked before fetching data
 searchBtn.addEventListener("click", (event) => {
   event.preventDefault();
-  st.city = searchTerm.value;
+  state.city = searchTerm.value;
   fetchData();
 });
 
 async function getWeatherData() {
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${st.city}&appid=${State.weatherAPIKey}`;
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${state.city}&appid=${State.weatherAPIKey}`;
   const response = await fetch(url);
   if (!response.ok) {
     console.error(`Response status: ${response.status}`);
@@ -80,7 +80,7 @@ async function getWeatherData() {
 }
 
 async function getPhotos() {
-  const url = `https://api.unsplash.com/search/photos?query=${st.weatherData.weather[0].description}&client_id=${State.unsplashAccessKey}`;
+  const url = `https://api.unsplash.com/search/photos?query=${state.weatherData.weather[0].description}&client_id=${State.unsplashAccessKey}`;
   const response = await fetch(url);
 
   if (!response.ok) {
@@ -91,23 +91,23 @@ async function getPhotos() {
 
 function msgToUser(element, isError) {
   if (!isError) {
-    element.textContent = st.feedbackService;
-    st.styleFeedbackMsg(element);
+    element.textContent = state.feedbackService;
+    state.styleFeedbackMsg(element);
   } else {
-    element.textContent = st.feedbackService;
-    st.styleFeedbackMsg(element);
+    element.textContent = state.feedbackService;
+    state.styleFeedbackMsg(element);
   }
 }
 
 async function fetchData() {
   msgToUser(loadingMsgEl, false);
-  st.isFetching = true;
+  state.isFetching = true;
   try {
     const weatherData = await getWeatherData();
-    st.weatherData = weatherData;
+    state.weatherData = weatherData;
 
     const photos = await getPhotos();
-    st.photos = photos;
+    state.photos = photos;
 
     updateUI();
     loadingMsgEl.remove(); // Remove loading message only if there is no error
@@ -115,7 +115,7 @@ async function fetchData() {
     msgToUser(loadingMsgEl, true);
     console.error(error);
   } finally {
-    st.isFetching = false;
+    state.isFetching = false;
   }
 }
 
@@ -146,9 +146,9 @@ function createThumbCard(photo) {
 }
 
 function updateUI() {
-  const thumbCards = st.photos.results.map(createThumbCard);
+  const thumbCards = state.photos.results.map(createThumbCard);
   thumbs.append(...thumbCards);
-  conditions.textContent = st.weatherData.weather[0].description;
+  conditions.textContent = state.weatherData.weather[0].description;
 }
 function loadMainImage(url, alt) {
   const mainImg = document.querySelector("#main-img");
