@@ -7,7 +7,6 @@ const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 let activeThumbnail = document.querySelector('[data-active="true"]');
 
-
 class Weather {
   constructor(isFetching) {
     this.isFetching = isFetching;
@@ -45,9 +44,94 @@ class Photos {
   }
 }
 
-const weather = new Weather();
+// class UI {
+//   constructor() {
+//     this.thumbCards = [];
+//     this.dataAttribute = "data-active";
+//   }
 
-class UI {
+//   createThumbCard(photo) {
+//     const thumbCard = document.createElement("section");
+//     const aEl = document.createElement("a");
+//     aEl.setAttribute("href", photo.urls.full);
+//     aEl.classList.add("id", "to-main-img");
+//     const img = document.createElement("img");
+//     img.setAttribute("src", photo.urls.thumb);
+//     img.setAttribute("alt", photo.alt_description);
+//     aEl.append(img);
+//     thumbCard.append(aEl);
+//     thumbCard.classList.add("thumb-card");
+//     // Add click event listener to load full image
+//     aEl.addEventListener("click", (event) => {
+//       event.preventDefault();
+
+//       this.handleActiveThumbnail(thumbCard);
+
+//       this.loadMainImage(photo.urls.full, photo.alt_description);
+//       //display user name et link to portfolio
+//       creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
+//       creditUser.setAttribute("href", photo.user.links.portfolio);
+//     });
+
+//     return thumbCard;
+//   }
+
+//   handleActiveThumbnail(thumbCard) {
+//     if (activeThumbnail) {
+//       // Remove data-active attribute from any previously active thumbnail
+//       activeThumbnail.removeAttribute(this.dataAttribute);
+//       activeThumbnail.style.border = "";
+//     }
+//     // Set data-active attribute on the clicked thumbnail
+//     thumbCard.setAttribute(this.dataAttribute, "true");
+//     thumbCard.style.border = "3px solid white";
+//     // Update the activeThumbnail reference
+//     activeThumbnail = thumbCard;
+//   }
+
+//   updateUI(weather, photos) {
+//     this.thumbCards = photos.results.map((photo) =>
+//       ThumbCard.createThumbCard(photo)
+//     );
+//     thumbs.append(...this.thumbCards);
+//     conditions.textContent = weather.weather[0].description;
+//   }
+
+//   updateDataLoadingStatus(element, isError) {
+//     const feedbackService = new FeedbackServices(isError);
+//     if (!isError) {
+//       element.textContent = feedbackService.feedbackService;
+//       feedbackService.styleFeedbackMsg(element);
+//     } else {
+//       element.textContent = feedbackService.feedbackService;
+//       feedbackService.styleFeedbackMsg(element);
+//     }
+//   }
+
+//   loadMainImage(url, alt) {
+//     const mainImg = document.querySelector("#main-img");
+//     const lowResImg = document.createElement("img");
+//     lowResImg.setAttribute("src", url.replace("full", "thumb"));
+//     lowResImg.setAttribute("alt", alt);
+//     lowResImg.style.position = "absolute";
+//     lowResImg.style.top = "0";
+//     lowResImg.style.left = "0";
+//     lowResImg.style.width = "100%";
+//     lowResImg.style.height = "100%";
+//     lowResImg.style.objectFit = "cover";
+//     mainImg.parentNode.appendChild(lowResImg);
+
+//     const highResImg = new Image();
+//     highResImg.src = url;
+//     highResImg.onload = () => {
+//       mainImg.setAttribute("src", url);
+//       mainImg.setAttribute("alt", alt);
+//       lowResImg.remove();
+//     };
+//   }
+// }
+
+class ThumbnailHandler {
   constructor() {
     this.thumbCards = [];
     this.dataAttribute = "data-active";
@@ -70,8 +154,8 @@ class UI {
 
       this.handleActiveThumbnail(thumbCard);
 
-      this.loadMainImage(photo.urls.full, photo.alt_description);
-      //display user name et link to portfolio
+      mainImageHandler.loadMainImage(photo.urls.full, photo.alt_description);
+      // Display user name and link to portfolio
       creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
       creditUser.setAttribute("href", photo.user.links.portfolio);
     });
@@ -99,22 +183,13 @@ class UI {
     thumbs.append(...this.thumbCards);
     conditions.textContent = weather.weather[0].description;
   }
+}
 
-  updateDataLoadingStatus(element, isError) {
-    const feedbackService = new FeedbackServices(isError);
-    if (!isError) {
-      element.textContent = feedbackService.feedbackService;
-      feedbackService.styleFeedbackMsg(element);
-    } else {
-      element.textContent = feedbackService.feedbackService;
-      feedbackService.styleFeedbackMsg(element);
-    }
-  }
-
+class MainImageHandler {
   loadMainImage(url, alt) {
     const mainImg = document.querySelector("#main-img");
     const lowResImg = document.createElement("img");
-    lowResImg.setAttribute("src", url.replace("full", "thumb"));
+    lowResImg.setAttribute("src", url.replace("full", "thumb")); // Assuming the URL structure allows this
     lowResImg.setAttribute("alt", alt);
     lowResImg.style.position = "absolute";
     lowResImg.style.top = "0";
@@ -134,7 +209,18 @@ class UI {
   }
 }
 
-const ui = new UI();
+class FeedbackHandler {
+  updateDataLoadingStatus(element, isError) {
+    const feedbackService = new FeedbackServices(isError);
+    if (!isError) {
+      element.textContent = feedbackService.feedbackService;
+      feedbackService.styleFeedbackMsg(element);
+    } else {
+      element.textContent = feedbackService.feedbackService;
+      feedbackService.styleFeedbackMsg(element);
+    }
+  }
+}
 class FeedbackServices {
   constructor(hasDataLoadSuccessfully) {
     this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
@@ -156,20 +242,25 @@ class FeedbackServices {
   }
 }
 
+const weather = new Weather();
+const thumbnailHandler = new ThumbnailHandler();
+const mainImageHandler = new MainImageHandler();
+const feedbackHandler = new FeedbackHandler();
+
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
   weather.isFetching = true;
-  ui.updateDataLoadingStatus(loadingMsgEl, false);
+  feedbackHandler.updateDataLoadingStatus(loadingMsgEl, false);
   try {
     await weather.fetchWeatherData();
     const photos = new Photos(weather.weatherData);
     await photos.fetchPhotos();
-    ui.updateUI(weather.weatherData, photos.photos);
-    ui.updateDataLoadingStatus(loadingMsgEl, false);
+    thumbnailHandler.updateUI(weather.weatherData, photos.photos);
+    feedbackHandler.updateDataLoadingStatus(loadingMsgEl, false);
     loadingMsgEl.remove();
   } catch (error) {
-    ui.updateDataLoadingStatus(loadingMsgEl, true);
+    feedbackHandler.updateDataLoadingStatus(loadingMsgEl, true);
   } finally {
     weather.isFetching = false;
   }
