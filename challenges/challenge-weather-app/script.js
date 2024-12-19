@@ -7,6 +7,7 @@ const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 let activeThumbnail = document.querySelector('[data-active="true"]');
 
+//==========Weather Class======================
 class Weather {
   constructor(isFetching) {
     this.isFetching = isFetching;
@@ -26,6 +27,7 @@ class Weather {
   }
 }
 
+//==========Photos Class======================
 class Photos {
   constructor(weatherData) {
     this.weatherData = weatherData;
@@ -44,6 +46,7 @@ class Photos {
   }
 }
 
+//==========ThumbnailHandler class======================
 class ThumbnailHandler {
   constructor() {
     this.thumbCards = [];
@@ -98,6 +101,7 @@ class ThumbnailHandler {
   }
 }
 
+//==========MainImageHandler class======================
 class MainImageHandler {
   loadMainImage(url, alt) {
     const mainImg = document.querySelector("#main-img");
@@ -122,6 +126,7 @@ class MainImageHandler {
   }
 }
 
+//==========DataLoadingMsgHandler class======================
 class DataLoadingMsgHandler {
   updateDataLoadingStatus(element, isError) {
     const feedbackService = new DataLoadingMsg(isError);
@@ -134,6 +139,8 @@ class DataLoadingMsgHandler {
     }
   }
 }
+
+//==========DataLoadingMsg class======================
 class DataLoadingMsg {
   constructor(hasDataLoadSuccessfully) {
     this.hasDataLoadSuccessfully = hasDataLoadSuccessfully;
@@ -155,11 +162,13 @@ class DataLoadingMsg {
   }
 }
 
+//==========Instantiation======================
 const weather = new Weather();
 const thumbnailHandler = new ThumbnailHandler();
 const mainImageHandler = new MainImageHandler();
 const dataLoadingMsgHandler = new DataLoadingMsgHandler();
 
+//Event listener
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
