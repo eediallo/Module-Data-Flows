@@ -57,26 +57,6 @@ class State {
   }
 }
 
-class ActiveThumbnail {
-  constructor(activeThumbnail, dataAttribute) {
-    this.activeThumbnail = activeThumbnail;
-    this.dataAttribute = dataAttribute;
-  }
-
-  handleActiveThumbnail(thumbCard) {
-    if (this.activeThumbnail) {
-      // Remove data-active attribute from any previously active thumbnail
-      this.activeThumbnail.removeAttribute(this.dataAttribute);
-      this.activeThumbnail.style.border = "";
-    }
-    // Set data-active attribute on the clicked thumbnail
-    thumbCard.setAttribute(this.dataAttribute, "true");
-    thumbCard.style.border = "3px solid white";
-    // Update the activeThumbnail reference
-    this.activeThumbnail = thumbCard;
-  }
-}
-
 class UI {
   constructor() {
     this.thumbCards = [];
@@ -109,12 +89,14 @@ class UI {
   }
 
   updateUI(state) {
-    this.thumbCards = state.photos.results.map(photo => this.createThumbCard(photo));
+    this.thumbCards = state.photos.results.map((photo) =>
+      this.createThumbCard(photo)
+    );
     thumbs.append(...this.thumbCards);
     conditions.textContent = state.weatherData.weather[0].description;
   }
 
-  msgToUser(element, isError) {
+  updateDataLoadingStatus(element, isError) {
     if (!isError) {
       element.textContent = state.feedbackService;
       state.styleFeedbackMsg(element);
@@ -131,10 +113,29 @@ class UI {
   }
 }
 
+class ActiveThumbnail {
+  constructor(activeThumbnail, dataAttribute) {
+    this.activeThumbnail = activeThumbnail;
+    this.dataAttribute = dataAttribute;
+  }
+
+  handleActiveThumbnail(thumbCard) {
+    if (this.activeThumbnail) {
+      // Remove data-active attribute from any previously active thumbnail
+      this.activeThumbnail.removeAttribute(this.dataAttribute);
+      this.activeThumbnail.style.border = "";
+    }
+    // Set data-active attribute on the clicked thumbnail
+    thumbCard.setAttribute(this.dataAttribute, "true");
+    thumbCard.style.border = "3px solid white";
+    // Update the activeThumbnail reference
+    this.activeThumbnail = thumbCard;
+  }
+}
 
 const state = new State(false, true);
-const aThumbnail = new ActiveThumbnail(activeThumbnail, 'data-active')
 const ui = new UI();
+const aThumbnail = new ActiveThumbnail(activeThumbnail, "data-active");
 
 searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
