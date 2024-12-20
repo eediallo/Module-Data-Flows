@@ -36,32 +36,43 @@ class LoadingMsgHandler extends Dog {
   }
 }
 
-const dog = new Dog();
 const loadingMsg = new LoadingMsgHandler();
 
-async function displayDogImage() {
-  dog.isFetching = true;
-  loadingMsg.displayDataLoadingStatus();
-  try {
-    const randomDogImage = await dog.fetchDogData();
-    dog.dogData = randomDogImage;
-    addDogImageToGallery();
-    loadMsgEl.remove();
-  } catch (error) {
-    console.error(error);
+class DisplayDog {
+  constructor(dog) {
+    this.dog = new Dog();
+  }
+
+  async displayDogImage() {
+    console.log("THis is : ", this);
+    this.dog.isFetching = true;
     loadingMsg.displayDataLoadingStatus();
-  } finally {
-    dog.isFetching = false;
+    try {
+      const randomDogImage = await this.dog.fetchDogData();
+      this.dog.dogData = randomDogImage;
+      this.addDogImageToGallery();
+      loadMsgEl.remove();
+    } catch (error) {
+      console.error(error);
+      loadingMsg.displayDataLoadingStatus();
+    } finally {
+      this.dog.isFetching = false;
+    }
+  }
+
+  addDogImageToGallery() {
+    const li = document.createElement("li");
+    const img = document.createElement("img");
+    img.setAttribute("src", this.dog.dogData.message);
+    li.append(img);
+    li.style.listStyle = "none";
+    ul.append(li);
   }
 }
 
-function addDogImageToGallery() {
-  const li = document.createElement("li");
-  const img = document.createElement("img");
-  img.setAttribute("src", dog.dogData.message);
-  li.append(img);
-  li.style.listStyle = "none";
-  ul.append(li);
-}
+const displayDog = new DisplayDog();
 
-displayDogBtn.addEventListener("click", displayDogImage);
+displayDogBtn.addEventListener(
+  "click",
+  displayDog.displayDogImage.bind(displayDog)
+);
