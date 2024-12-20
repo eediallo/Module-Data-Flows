@@ -23,18 +23,25 @@ class Dog {
   }
 }
 
-const dog = new Dog();
+class LoadingMsgHandler {
+  constructor(isLoading) {
+    this.isLoading = isLoading;
+  }
 
-function displayDataLoadingStatus(isLoading) {
-  const loadingMsg = isLoading
-    ? "Data is loading. Please wait!"
-    : "Data failed to load. Please try again";
-  loadMsgEl.textContent = loadingMsg;
+  displayDataLoadingStatus() {
+    const loadingMsg = this.isLoading
+      ? "Data is loading. Please wait!"
+      : "Data failed to load. Please try again";
+    loadMsgEl.textContent = loadingMsg;
+  }
 }
+
+const dog = new Dog();
+const loadingMsg = new LoadingMsgHandler(true);
 
 async function displayDogImage() {
   dog.isFetching = true;
-  displayDataLoadingStatus(true);
+  loadingMsg.displayDataLoadingStatus();
   try {
     const randomDogImage = await dog.fetchDogData();
     dog.dogData = randomDogImage;
@@ -42,7 +49,7 @@ async function displayDogImage() {
     loadMsgEl.remove();
   } catch (error) {
     console.error(error);
-    displayDataLoadingStatus(false);
+    loadingMsg.displayDataLoadingStatus(false);
   } finally {
     dog.isFetching = false;
   }
