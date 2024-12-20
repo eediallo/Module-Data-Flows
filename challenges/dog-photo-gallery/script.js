@@ -23,13 +23,13 @@ class Dog {
   }
 }
 
-class LoadingMsgHandler {
-  constructor(isLoading) {
-    this.isLoading = isLoading;
+class LoadingMsgHandler extends Dog {
+  constructor(isFetching) {
+    super(isFetching);
   }
 
   displayDataLoadingStatus() {
-    const loadingMsg = this.isLoading
+    const loadingMsg = this.isFetching
       ? "Data is loading. Please wait!"
       : "Data failed to load. Please try again";
     loadMsgEl.textContent = loadingMsg;
@@ -37,7 +37,7 @@ class LoadingMsgHandler {
 }
 
 const dog = new Dog();
-const loadingMsg = new LoadingMsgHandler(true);
+const loadingMsg = new LoadingMsgHandler();
 
 async function displayDogImage() {
   dog.isFetching = true;
@@ -49,7 +49,7 @@ async function displayDogImage() {
     loadMsgEl.remove();
   } catch (error) {
     console.error(error);
-    loadingMsg.displayDataLoadingStatus(false);
+    loadingMsg.displayDataLoadingStatus();
   } finally {
     dog.isFetching = false;
   }
