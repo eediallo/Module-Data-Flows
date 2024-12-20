@@ -3,12 +3,13 @@ gallery.classList.add("photo-gallery");
 const displayDogBtn = document.createElement("button");
 displayDogBtn.textContent = "Click to display random dog";
 const ul = document.createElement("ul");
-const loadMsgEl = document.querySelector(".loading-msg");
+const loadMsgEl = document.createElement("div");
+loadMsgEl.classList.add("loading-msg");
 
-document.body.append(gallery, displayDogBtn, ul);
+document.body.append(gallery, displayDogBtn, ul, loadMsgEl);
 
-class Dog {
-  constructor(dogData, isFetching) {
+class DogGallery {
+  constructor() {
     this.dogData = {};
     this.isFetching = false;
   }
@@ -21,58 +22,40 @@ class Dog {
     }
     return response.json();
   }
-}
 
-class LoadingMsgHandler extends Dog {
-  constructor(isFetching) {
-    super(isFetching);
-  }
-
-  displayDataLoadingStatus() {
-    const loadingMsg = this.isFetching
+  displayLoadingStatus() {
+    loadMsgEl.textContent = this.isFetching
       ? "Data is loading. Please wait!"
       : "Data failed to load. Please try again";
-    loadMsgEl.textContent = loadingMsg;
-  }
-}
-
-const loadingMsg = new LoadingMsgHandler();
-
-class AddAnddDisplayDogToGallery {
-  constructor(dog) {
-    this.dog = new Dog();
   }
 
   async displayDogImage() {
-    this.dog.isFetching = true;
-    loadingMsg.displayDataLoadingStatus();
+    this.isFetching = true;
+    this.displayLoadingStatus();
     try {
-      const randomDogImage = await this.dog.fetchDogData();
-      this.dog.dogData = randomDogImage;
+      const randomDogImage = await this.fetchDogData();
+      this.dogData = randomDogImage;
       this.addDogImageToGallery();
-      loadMsgEl.remove();
+      loadMsgEl.textContent = "";
     } catch (error) {
       console.error(error);
-      loadingMsg.displayDataLoadingStatus();
+      this.displayLoadingStatus();
     } finally {
-      this.dog.isFetching = false;
+      this.isFetching = false;
     }
   }
 
   addDogImageToGallery() {
     const li = document.createElement("li");
     const img = document.createElement("img");
-    img.setAttribute("src", this.dog.dogData.message);
+    img.setAttribute("src", this.dogData.message);
     li.append(img);
     li.style.listStyle = "none";
     ul.append(li);
   }
 }
 
-const andAnddisplayDogToGallery = new AddAnddDisplayDogToGallery();
+const dogGallery = new DogGallery();
 
-//event listener
-displayDogBtn.addEventListener(
-  "click",
-  andAnddisplayDogToGallery.displayDogImage.bind(andAnddisplayDogToGallery)
-);
+// Event listener
+displayDogBtn.addEventListener("click", dogGallery.displayDogImage.bind(dogGallery));
