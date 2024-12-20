@@ -44,7 +44,6 @@ class DisplayDog {
   }
 
   async displayDogImage() {
-    console.log("THis is : ", this);
     this.dog.isFetching = true;
     loadingMsg.displayDataLoadingStatus();
     try {
