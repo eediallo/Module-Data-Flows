@@ -22,22 +22,19 @@ function displayDataLoadingStatus(isLoading) {
 async function fetchDogData() {
   const url = "https://dog.ceo/api/breeds/image/random";
   const response = await fetch(url);
-
   if (!response.ok) {
     throw new Error(`Response status: ${response.status}`);
   }
-
   return response.json();
 }
 
-async function fetchRandomDogImage() {
+async function displayDogImage() {
   state.isFetching = true;
   displayDataLoadingStatus(true);
   try {
-    const dogData = await fetchDogData();
-    state.dogData = dogData;
-
-    displayDogImage();
+    const randomDogImage = await fetchDogData();
+    state.dogData = randomDogImage;
+    addDogImageToGallery();
     loadMsgEl.remove();
   } catch (error) {
     console.error(error);
@@ -47,7 +44,7 @@ async function fetchRandomDogImage() {
   }
 }
 
-function displayDogImage() {
+function addDogImageToGallery() {
   const li = document.createElement("li");
   const img = document.createElement("img");
   img.setAttribute("src", state.dogData.message);
@@ -56,4 +53,4 @@ function displayDogImage() {
   ul.append(li);
 }
 
-displayDogBtn.addEventListener("click", fetchRandomDogImage);
+displayDogBtn.addEventListener("click", displayDogImage);
