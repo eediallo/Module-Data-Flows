@@ -7,10 +7,23 @@ const loadMsgEl = document.querySelector(".loading-msg");
 
 document.body.append(gallery, displayDogBtn, ul);
 
-const state = {
-  dogData: {},
-  isFetching: false,
-};
+class Dog {
+  constructor(dogData, isFetching) {
+    this.dogData = {};
+    this.isFetching = false;
+  }
+
+  async fetchDogData() {
+    const url = "https://dog.ceo/api/breeds/image/random";
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    return response.json();
+  }
+}
+
+const dog = new Dog();
 
 function displayDataLoadingStatus(isLoading) {
   const loadingMsg = isLoading
@@ -19,35 +32,26 @@ function displayDataLoadingStatus(isLoading) {
   loadMsgEl.textContent = loadingMsg;
 }
 
-async function fetchDogData() {
-  const url = "https://dog.ceo/api/breeds/image/random";
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Response status: ${response.status}`);
-  }
-  return response.json();
-}
-
 async function displayDogImage() {
-  state.isFetching = true;
+  dog.isFetching = true;
   displayDataLoadingStatus(true);
   try {
-    const randomDogImage = await fetchDogData();
-    state.dogData = randomDogImage;
+    const randomDogImage = await dog.fetchDogData();
+    dog.dogData = randomDogImage;
     addDogImageToGallery();
     loadMsgEl.remove();
   } catch (error) {
     console.error(error);
     displayDataLoadingStatus(false);
   } finally {
-    state.isFetching = false;
+    dog.isFetching = false;
   }
 }
 
 function addDogImageToGallery() {
   const li = document.createElement("li");
   const img = document.createElement("img");
-  img.setAttribute("src", state.dogData.message);
+  img.setAttribute("src", dog.dogData.message);
   li.append(img);
   li.style.listStyle = "none";
   ul.append(li);
