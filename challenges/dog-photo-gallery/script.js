@@ -38,7 +38,7 @@ class LoadingMsgHandler extends Dog {
 
 const loadingMsg = new LoadingMsgHandler();
 
-class DisplayDog {
+class AddAnddDisplayDogToGallery {
   constructor(dog) {
     this.dog = new Dog();
   }
@@ -69,9 +69,10 @@ class DisplayDog {
   }
 }
 
-const displayDog = new DisplayDog();
+const andAnddisplayDogToGallery = new AddAnddDisplayDogToGallery();
 
+//event listener
 displayDogBtn.addEventListener(
   "click",
-  displayDog.displayDogImage.bind(displayDog)
+  andAnddisplayDogToGallery.displayDogImage.bind(andAnddisplayDogToGallery)
 );
