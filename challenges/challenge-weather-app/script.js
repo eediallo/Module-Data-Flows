@@ -2,9 +2,6 @@ import { Weather } from "./weather.js";
 import { Photos } from "./photos.js";
 import { ThumbnailHandler } from "./thumbnailHandler.js";
 
-const thumbs = document.querySelector("#thumbs");
-const mainPhoto = document.querySelector("#photo");
-const conditions = document.querySelector("#conditions");
 const searchTerm = document.querySelector("#search-tf");
 const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
