@@ -1,3 +1,5 @@
+//import { EmptyOrNumericCity } from "./script.js";
+import {emptyOrNumericCity} from "./script.js";
 export class Weather {
   constructor(isFetching, city = "") {
     this.isFetching = isFetching;

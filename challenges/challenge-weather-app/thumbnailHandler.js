@@ -1,3 +1,7 @@
+import { mainImageHandler } from "./mainImageHandler.js";
+let activeThumbnail = document.querySelector('[data-active="true"]');
+const creditUser = document.querySelector("#credit-user");
+
 export class ThumbnailHandler {
   constructor() {
     this.thumbCards = [];

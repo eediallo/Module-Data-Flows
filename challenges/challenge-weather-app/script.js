@@ -5,14 +5,13 @@ import { ThumbnailHandler } from "./thumbnailHandler.js";
 const thumbs = document.querySelector("#thumbs");
 const mainPhoto = document.querySelector("#photo");
 const conditions = document.querySelector("#conditions");
-const creditUser = document.querySelector("#credit-user");
 const searchTerm = document.querySelector("#search-tf");
 const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
-let activeThumbnail = document.querySelector('[data-active="true"]');
+
 
 //==========EmptyOrNumericCity Class======================
-class EmptyOrNumericCity {
+export class EmptyOrNumericCity {
   constructor(city) {
     this.city = city;
   }
@@ -26,7 +25,8 @@ class EmptyOrNumericCity {
     }
   }
 }
-const emptyOrNumericCity = new EmptyOrNumericCity();
+
+export const emptyOrNumericCity = new EmptyOrNumericCity();
 
 //==========MainImageHandler class======================
 class MainImageHandler {
@@ -95,7 +95,6 @@ class DataLoadingMsg {
 //==========Instantiation======================
 const weather = new Weather();
 const thumbnailHandler = new ThumbnailHandler();
-const mainImageHandler = new MainImageHandler();
 const dataLoadingMsgHandler = new DataLoadingMsgHandler();
 const dataLoadingMsg = new DataLoadingMsg();
 
