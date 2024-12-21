@@ -68,7 +68,7 @@ searchBtn.addEventListener("click", async (event) => {
 
     await weather.fetchWeatherData();
 
-    const photos = new Photos(weather.weatherData, weather.city);
+    const photos = new Photos(weather.weatherData);
     await photos.fetchPhotos();
 
     thumbnailHandler.updateUI(weather.weatherData, photos.photos);
