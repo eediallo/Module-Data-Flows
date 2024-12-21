@@ -1,4 +1,6 @@
 import { Weather } from "./weather.js";
+import { Photos } from "./photos.js";
+import { ThumbnailHandler } from "./thumbnailHandler.js";
 
 const thumbs = document.querySelector("#thumbs");
 const mainPhoto = document.querySelector("#photo");
@@ -25,78 +27,6 @@ class EmptyOrNumericCity {
   }
 }
 const emptyOrNumericCity = new EmptyOrNumericCity();
-
-//==========Photos Class======================
-class Photos {
-  constructor(weatherData) {
-    this.weatherData = weatherData;
-    this.photos = {};
-  }
-
-  static unsplashAccessKey = config.unsplash_access_key;
-
-  async fetchPhotos() {
-    const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${Photos.unsplashAccessKey}`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.error(`Response status: ${response.status}`);
-    }
-    this.photos = await response.json();
-  }
-}
-
-//==========ThumbnailHandler class======================
-class ThumbnailHandler {
-  constructor() {
-    this.thumbCards = [];
-    this.dataAttribute = "data-active";
-  }
-
-  createThumbCard(photo) {
-    const thumbCard = document.createElement("section");
-    const aEl = document.createElement("a");
-    aEl.setAttribute("href", photo.urls.full);
-    aEl.classList.add("id", "to-main-img");
-    const img = document.createElement("img");
-    img.setAttribute("src", photo.urls.thumb);
-    img.setAttribute("alt", photo.alt_description);
-    aEl.append(img);
-    thumbCard.append(aEl);
-    thumbCard.classList.add("thumb-card");
-    // Add click event listener to load full image
-    aEl.addEventListener("click", (event) => {
-      event.preventDefault();
-
-      this.handleActiveThumbnail(thumbCard);
-
-      mainImageHandler.loadMainImage(photo.urls.full, photo.alt_description);
-      // Display user name and link to portfolio
-      creditUser.textContent = `${photo.user.first_name} ${photo.user.last_name}`;
-      creditUser.setAttribute("href", photo.user.links.portfolio);
-    });
-
-    return thumbCard;
-  }
-
-  handleActiveThumbnail(thumbCard) {
-    if (activeThumbnail) {
-      activeThumbnail.removeAttribute(this.dataAttribute);
-      activeThumbnail.style.border = "";
-    }
-    thumbCard.setAttribute(this.dataAttribute, "true");
-    thumbCard.style.border = "3px solid white";
-    // Update the activeThumbnail reference
-    activeThumbnail = thumbCard;
-  }
-
-  updateUI(weather, photos) {
-    this.thumbCards = photos.results.map((photo) =>
-      this.createThumbCard(photo)
-    );
-    thumbs.append(...this.thumbCards);
-    conditions.textContent = weather.weather[0].description;
-  }
-}
 
 //==========MainImageHandler class======================
 class MainImageHandler {
