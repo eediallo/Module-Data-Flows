@@ -1,4 +1,5 @@
-import { Weather } from "./weather.js";
+import { config } from "./config.js";
+
 export class Photos {
   constructor(weatherData) {
     this.weatherData = weatherData;

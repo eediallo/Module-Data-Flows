@@ -9,50 +9,6 @@ const searchTerm = document.querySelector("#search-tf");
 const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
 
-
-//==========EmptyOrNumericCity Class======================
-export class EmptyOrNumericCity {
-  constructor(city) {
-    this.city = city;
-  }
-
-  handleEmptyOrNumericCity(dataLoadingMsg) {
-    if (this.city === "" || !isNaN(this.city)) {
-      loadingMsgEl.textContent =
-        "Invalid city: must be a non empty string: eg- London, Conakry, Manchester etc...";
-      dataLoadingMsg.styleFeedbackMsg(loadingMsgEl);
-      throw new Error(`Invalid city: ${this.city}`);
-    }
-  }
-}
-
-export const emptyOrNumericCity = new EmptyOrNumericCity();
-
-//==========MainImageHandler class======================
-class MainImageHandler {
-  loadMainImage(url, alt) {
-    const mainImg = document.querySelector("#main-img");
-    const lowResImg = new Image();
-    lowResImg.setAttribute("src", url);
-    lowResImg.setAttribute("alt", alt);
-    lowResImg.style.position = "absolute";
-    lowResImg.style.top = "0";
-    lowResImg.style.left = "0";
-    lowResImg.style.width = "100%";
-    lowResImg.style.height = "100%";
-    lowResImg.style.objectFit = "cover";
-    mainImg.parentNode.appendChild(lowResImg);
-
-    const highResImg = new Image();
-    highResImg.src = url;
-    highResImg.onload = () => {
-      mainImg.setAttribute("src", url);
-      mainImg.setAttribute("alt", alt);
-      lowResImg.remove();
-    };
-  }
-}
-
 //==========DataLoadingMsgHandler class======================
 class DataLoadingMsgHandler {
   constructor(isError) {
@@ -103,16 +59,16 @@ searchBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   weather.city = searchTerm.value;
 
-  emptyOrNumericCity.city = weather.city;
-  emptyOrNumericCity.handleEmptyOrNumericCity(dataLoadingMsg); // handle empty or numeric string
-
-  weather.isFetching = true;
-  dataLoadingMsg.isError = false;
-  dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
   try {
+    weather.handleEmptyOrNumericCity(); // handle empty or numeric string
+
+    weather.isFetching = true;
+    dataLoadingMsg.isError = false;
+    dataLoadingMsgHandler.updateDataLoadingStatus(loadingMsgEl, false);
+
     await weather.fetchWeatherData();
 
-    const photos = new Photos(weather.weatherData);
+    const photos = new Photos(weather.weatherData, weather.city);
     await photos.fetchPhotos();
 
     thumbnailHandler.updateUI(weather.weatherData, photos.photos);
