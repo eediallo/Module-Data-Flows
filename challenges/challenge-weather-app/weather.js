@@ -1,9 +1,10 @@
 import { config } from "./config.js";
 
 export class Weather {
-  constructor(weatherData = {}, city = "") {
+  constructor(isFetching = false, weatherData = {}, city = "") {
     this.weatherData = weatherData;
     this.city = city;
+    this.isFetching = isFetching;
   }
 
   static weatherAPIKey = config.weather_API_Key;
