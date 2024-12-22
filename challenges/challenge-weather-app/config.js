@@ -1,4 +1,10 @@
-export const config = {
-  weather_API_Key: "3b3e64be7a14413a3311c4198bbe9582",
-  unsplash_access_key: "ds-h-C1-el1wmZC5mvMG9sgSp2jkWFbCZSUqKxwPVxo",
-};
+import { Weather } from "./weather.js";
+import { ThumbnailHandler } from "./thumbnailHandler.js";
+import { DataLoadingMsgHandler } from "./dataLoadingStatus.js";
+
+//==========Instantiation======================
+const weather = new Weather();
+const thumbnailHandler = new ThumbnailHandler();
+const dataLoadingMsgHandler = new DataLoadingMsgHandler();
+
+export { weather, thumbnailHandler, dataLoadingMsgHandler };
