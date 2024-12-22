@@ -1,16 +1,9 @@
-import { Weather } from "./weather.js";
+import { weather, thumbnailHandler, dataLoadingMsgHandler } from "./config.js";
 import { Photos } from "./photos.js";
-import { ThumbnailHandler } from "./thumbnailHandler.js";
-import { DataLoadingMsgHandler } from "./dataLoadingStatus.js";
 
 const searchTerm = document.querySelector("#search-tf");
 const searchBtn = document.querySelector(".search__btn");
 const loadingMsgEl = document.querySelector(".loading-msg");
-
-//==========Instantiation======================
-const weather = new Weather();
-const thumbnailHandler = new ThumbnailHandler();
-const dataLoadingMsgHandler = new DataLoadingMsgHandler();
 
 //Event listener
 searchBtn.addEventListener("click", async (event) => {

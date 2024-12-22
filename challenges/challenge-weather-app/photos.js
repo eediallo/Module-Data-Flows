@@ -1,4 +1,4 @@
-import { config } from "./config.js";
+import { keys } from "./apiKeys.js";
 
 export class Photos {
   constructor(weatherData) {
@@ -6,7 +6,7 @@ export class Photos {
     this.photos = {};
   }
 
-  static unsplashAccessKey = config.unsplash_access_key;
+  static unsplashAccessKey = keys.unsplash_access_key;
 
   async fetchPhotos() {
     try {

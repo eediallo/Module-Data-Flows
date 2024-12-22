@@ -1,4 +1,4 @@
-import { config } from "./config.js";
+import { keys } from "./apiKeys.js";
 
 export class Weather {
   constructor(isFetching = false, weatherData = {}, city = "") {
@@ -7,7 +7,7 @@ export class Weather {
     this.isFetching = isFetching;
   }
 
-  static weatherAPIKey = config.weather_API_Key;
+  static weatherAPIKey = keys.weather_API_Key;
 
   async fetchWeatherData() {
     try {
