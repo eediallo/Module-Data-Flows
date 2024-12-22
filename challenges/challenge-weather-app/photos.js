@@ -9,11 +9,15 @@ export class Photos {
   static unsplashAccessKey = config.unsplash_access_key;
 
   async fetchPhotos() {
-    const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${Photos.unsplashAccessKey}`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.error(`Response status: ${response.status}`);
+    try {
+      const url = `https://api.unsplash.com/search/photos?query=${this.weatherData.weather[0].description}&client_id=${Photos.unsplashAccessKey}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Error fetching photos: ${response.statusText}`);
+      }
+      this.photos = await response.json();
+    } catch (error) {
+      console.error(`Failed to fetch photos: ${error.message}`);
     }
-    this.photos = await response.json();
   }
 }

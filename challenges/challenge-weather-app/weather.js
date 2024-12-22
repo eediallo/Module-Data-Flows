@@ -10,13 +10,17 @@ export class Weather {
   static weatherAPIKey = config.weather_API_Key;
 
   async fetchWeatherData() {
-    this.handleEmptyOrNumericCity();
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${Weather.weatherAPIKey}`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.error(`Response status: ${response.status}`);
+    try {
+      this.handleEmptyOrNumericCity();
+      const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${Weather.weatherAPIKey}`;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Error fetching weather data: ${response.statusText}`);
+      }
+      this.weatherData = await response.json();
+    } catch (error) {
+      console.error(`Failed to fetch weather data: ${error.message}`);
     }
-    this.weatherData = await response.json();
   }
 
   handleEmptyOrNumericCity() {
